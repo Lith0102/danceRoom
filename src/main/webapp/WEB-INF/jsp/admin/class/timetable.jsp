@@ -298,10 +298,11 @@
 			   var classId = data.Id;//该时间段课表id
 			   $.ajax({
 					type : "POST",
-					url : "/${applicationScope.adminprefix }/consumer/deleteids",
+					url : "/${applicationScope.adminprefix }/danceClass/updClassData",
 					async : false,
 					data : {
-						"ids" : ids
+						"classId" : classId,
+						""
 					},
 					success : function(data) {
 						tableIns.reload({
