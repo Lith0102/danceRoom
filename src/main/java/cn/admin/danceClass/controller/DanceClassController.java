@@ -51,6 +51,7 @@ public class DanceClassController {
 	@ResponseBody
 	public Map<String,Object> updClassData(){
 		Map<String,Object> result = new HashMap<String,Object>();
+		
 		return result;
 	}
 	
