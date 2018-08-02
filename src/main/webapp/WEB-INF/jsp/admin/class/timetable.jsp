@@ -15,7 +15,13 @@
 			max-width: 200% !important;
 		}
 		.layui-table tr{
-			height: 50px;
+			height: 70px;
+		}
+		.delIcon{
+			font-size: 20px;
+		    font-weight: bolder;
+		    color: #FF5722;
+		    cursor: pointer;
 		}
 	</style>
 </m:Content>
@@ -66,7 +72,13 @@
 		</div> -->
 		<div class="layui-form-item" style="padding-top: 10px; margin-bottom: 0;">
 			<div class="layui-inline">
-				<button class="layui-btn download"><i class="layui-icon">&#xe601;</i>打印生成课表</button>
+				<button class="layui-btn download" id="download"><i class="layui-icon">&#xe601;</i>打印生成课表</button>
+			</div>
+			<div class="layui-inline">
+				<button class="layui-btn layui-btn-normal" id="addClass"><i class="layui-icon">&#xe654;</i>添加课程</button>
+			</div>
+			<div class="layui-inline">
+				<button class="layui-btn layui-btn-danger" id="delClass"><i class="layui-icon">&#xe640;</i><span>删除时间</span></button>
 			</div>
 			<!-- <div class="layui-inline">
 				<button id="deleteId" class="layui-btn layui-btn-danger" ><i class="layui-icon">&#xe640;</i>批量删除</button>
@@ -76,6 +88,7 @@
 		<div class="layui-form">
 			<table class="layui-table" lay-skin="line" id="danceClass" lay-filter="tableContent"></table>
 		</div>
+		<input type="hidden" name="classIds" id="classIds">
 		
 		<%-- <div class="layui-tab layui-tab-brief" id="detailPanel" style="display: none;">
 		  <ul class="layui-tab-title" id="tab_btn">
@@ -94,6 +107,9 @@
 		</div>  --%>
 		
 	</div>
+	<!-- 视频播放容器 -->
+	<!-- <div id="a1"></div> -->
+	
 	<!-- 操作按钮 -->
 	<!-- <script type="text/html" id="caozuo">
 		<input type="hidden" name="userId" id="userId" value="{{ d.userId }}" />
@@ -101,48 +117,26 @@
 		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edits">查看</a>
 		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="deletes">删除</a>
 	</script> -->
-	<!-- 课表星期排布 -->
-	<script type="text/html" id="yi">
-		{{#	if(d.week==1){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="er">
-		{{#	if(d.week==2){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="san">
-		{{#	if(d.week==3){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="si">
-		{{#	if(d.week==4){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="wu">
-		{{#	if(d.week==5){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="liu">
-		{{#	if(d.week==6){ }}
-			{{ d.danceText }}
-		{{#	} }}
-	</script>
-	<script type="text/html" id="qi">
-		{{#	if(d.week==7){ }}
-			{{ d.danceText }}
-		{{#	} }}
+	<script type="text/html" id="checkClass">
+		<i class="layui-icon delIcon" name="tabDel" lay_value="{{d.Id}}" onclick="delInfo({{d.Id}});">&#x1006;</i>
 	</script>
 </m:Content>
 <m:Content contentPlaceHolderId="js">
 	<script type="text/javascript" src="/manage/public/js/ToolTip.js"></script>
+	<!-- <script type="text/javascript" src="/manage/public/js/ckplayer/ckplayer.js"></script>
+	<script type="text/javascript">
+	    var flashvars={
+	        f:'/upload/123.mp4',
+	        c:0,
+	        loaded:'loadedHandler'
+	    };
+	    var video=['/upload/123.mp4->video/mp4'];
+	    CKobject.embed('/manage/public/js/ckplayer/ckplayer.swf','a1','ckplayer_a1','600','400',false,flashvars,video);
+	</script> -->
 	<script type="text/javascript">
 		var userId = 0;
 		var yhType = 0;
+		var tableIns;
 		//JavaScript代码区域
 		layui.use(['laypage', 'layer', 'table', 'form', 'laydate'], function(){
 			var table = layui.table;
@@ -155,7 +149,7 @@
 				range: true
 			});
 			//绑定表格
-			var tableIns = table.render({
+			tableIns = table.render({
 				id: 'danceClass',
 				elem: '#danceClass',
 				url: '/${applicationScope.adminprefix }/danceClass/classData', //数据接口
@@ -164,71 +158,80 @@
 				limits: [10, 20, 30, 40, 50],
 				cols: [
 					[ //表头
+						{
+							title: '<i class="layui-icon delIcon" name="titleDel" onclick="delInfo(0);">&#x1006;</i>',
+							width: "5%",
+							templet:"#checkClass"
+						},
 					  	{
 							field: 'danceTime',
 							type: '',
-							width: "12.5%",
-							edit:'text',
+							width: "12.4%",
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'monday',
 							title: '星期一',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#yi"
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'tuesday',
 							title: '星期二',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#er"
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'wednesday',
 							title: '星期三',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#san"
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'thursday',
 							title: '星期四',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#si"
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'friday',
 							title: '星期五',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#wu"
-						}, 
+							edit:'text'
+						},
 						{
-							field: '',
+							field: 'saturday',
 							title: '星期六',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#liu"
+							edit:'text'
 						}, 
 						{
-							field: '',
+							field: 'sunday',
 							title: '星期日',
-							width: "12.5%",
+							width: "12.4%",
 							height:"50px",
-							edit:'text',
-							templet:"#qi"
-						}
+							edit:'text'
+						},
 					]
 				],
 				done: function(){
+					 $(".layui-table-main .layui-table tr td").each(function(){
+						 var tdName = $(this).attr("data-field");
+						 if(tdName!="danceTime"){
+							 var tdText = $(this).find("div").html();
+							 if(tdText!=null && tdText!='' && tdText!=' ' && tdText.indexOf("<i")<0){
+								 $(this).attr("style","background-color:#FF8080;color:#fff;");
+							 }
+						 }
+					 })
+					 
+					 $("table").find("[data-field=0]").attr("style","display:none;");
 					//行点击事件
 					/* $('tbody').on('click',"td",function() {
 						if($(this).index() > 9 || $(this).index() < 1){
@@ -249,7 +252,8 @@
 			});
 			//导出excel
 			$(".download").click(function(){
-				var name=$('input[name="name"]').val(),
+				layer.msg("小侯同学别着急啊,敬请期待！");
+				/* var name=$('input[name="name"]').val(),
 				isFreeze=$('select[name="isFreeze"]').val(),
 				registrationDate=$("#registrationDate").val(),
 				userType=$("select[name='userType']").val();
@@ -258,9 +262,110 @@
 				var ids = '';
 				$.each(checkStatus.data, function(i){
 					ids = ids + checkStatus.data[i].userId + ',';
-				})
-				window.location.href="/${applicationScope.adminprefix }/consumer/download?name="+name+"&isFreeze="+isFreeze+"&registrationDate="+registrationDate+"&userType="+userType+"&ids="+ids;
+				}) */
 			})
+			
+			//添加课程时间
+			$("#addClass").click(function(){
+				$.ajax({
+					type:"POST",
+					url:"/${applicationScope.adminprefix }/danceClass/addClassData",
+					async:false,
+					datatype:"json",
+					success:function(data){
+						if(data.result){
+							layer.msg(data.msg,{icon:1});
+							reload();
+						}else{
+							layer.msg(data.msg,{icon:2});
+						}
+					},
+					error:function(data){
+						layer.msg(data.msg,{icon:2});
+					}
+				})
+			});
+			
+			//监听单元格编辑
+			table.on('edit(tableContent)', function(obj){
+			   var value = obj.value; //得到修改后的值
+			   var data = obj.data; //得到所在行所有键值
+			   var field = obj.field; //得到字段
+			   var classId = data.Id;//该时间段课表id
+			   $.ajax({
+					type : "POST",
+					url : "/${applicationScope.adminprefix }/danceClass/updClassData",
+					async : false,
+					data : {
+						"classId" : classId,
+						"updkey":field,
+						"updvalue":value
+					},
+					success : function(data) {
+						if(data.result){
+							reload();
+							layer.msg(data.msg,{icon: 1});
+						}else{
+							layer.msg(data.msg,{icon: 2});
+						}
+						
+					},
+					error : function(data) {
+						layer.msg(data.msg,{icon: 2});
+					}
+				});
+			   
+			});
+			
+			//点击删除按钮，显示叉号
+			$("#delClass").click(function(){
+				var text = $(this).find("span").html();
+				if(text=="删除时间"){
+					$("table").find("[data-field=0]").attr("style","");
+					$(this).find("span").html("取消删除");
+				}else{
+					$(this).find("span").html("删除时间");
+					$("table").find("[data-field=0]").attr("style","display:none;");
+				}
+			})
+			
+			$("i[name='tabDel']").click(function(){
+				layer.msg(123);
+			})
+			
+			
+			//监听复选框
+			form.on('checkbox()', function(data){
+				var checkName = data.elem.name;
+				var titleCheck = $("input[name=titleCheck]");//标题行的复选框
+				var allCheckSize = $("input[name=checkClass]").length;//不包括标题行的复选框总数
+				var checkSize = $("input[name=checkClass]:checked").length;//选中的复选框数量
+				
+				if(checkName=='titleCheck'){//点击的是标题行的复选框时
+					//点击标题行复选框时，修改表格复选框的样式
+					if($("input[name=titleCheck]:checked")>0){
+						$("input[name=checkClass]").each(function(){
+							$(this).attr("checked","checked");
+						})
+					}
+				}else{
+					//全部选中时，修改标题行复选框的样式
+					if(allCheckSize==checkSize){
+						titleCheck.next("div").addClass("layui-form-checked");
+					}else{
+						titleCheck.next("div").removeClass("layui-form-checked");
+					}
+				}
+				
+				
+				/* if((chekcLength>0 && chekcLength!=6) || firstCheck>0){
+					$("#delClass").find("span").html("确认删除");
+				}else if((chekcLength==6 &&　firstCheck==0) || chekcLength==0){
+					$("#delClass").find("span").html("取消删除");
+				} */
+			});
+
+			
 			//搜索，重置表格
 			$('.search').click(function() { 
 				tableIns.reload({
@@ -289,37 +394,6 @@
 			  		//删除
 			  		deletes(userId);
 			  	}
-			});
-			//监听单元格编辑
-			table.on('edit(tableContent)', function(obj){
-			   var value = obj.value; //得到修改后的值
-			   var data = obj.data; //得到所在行所有键值
-			   var field = obj.field; //得到字段
-			   var classId = data.Id;//该时间段课表id
-			   $.ajax({
-					type : "POST",
-					url : "/${applicationScope.adminprefix }/danceClass/updClassData",
-					async : false,
-					data : {
-						"classId" : classId,
-						""
-					},
-					success : function(data) {
-						tableIns.reload({
-							where: {
-								num:Math.random()
-							},
-							page: {
-								curr: 1 //重新从第 1 页开始
-							}
-						});
-						layer.alert(data.msg,{icon: 1});
-					},
-					error : function(data) {
-						layer.alert(data.msg,{icon: 2});
-					}
-				});
-			   
 			});
 			//批量删除
 			$('#deleteId').click(function(){
@@ -389,24 +463,13 @@
 					});
 				})
 			}
-			//编辑/查看
-			function updateUser(userId,userType){
-				layer.open({
-					type: 2,
-					title: ['用户信息', 'font-size:18px;'],
-					shadeClose: true,
-					area: ['100%', "100%"],
-					content: '/${applicationScope.adminprefix }/consumer/UpConsumer?userType='+userType+'&userId=' + userId ,
-					success: function(layero, index) {
-						layer.full(index);
-					},
-					end: function() { //销毁后触发
-						table.reload('consumer', {
-							page: {
-								curr: 1
-							}
-						});
+			//刷新页面
+			function reload(){
+				tableIns.reload({
+					where: {
+						num:Math.random()
 					}
+					
 				});
 			}
 			//页签切换
@@ -449,10 +512,38 @@
 				}catch (ex){}
 			} */
 		})
-	/* 	function CloseIframe(){
-			$("#detailPanel").hide();
-		} */
-			
+		function delInfo(classId){
+			var text = "";
+			if(classId=='' || classId==null){
+				text="确定删除全部课程?";
+			}else{
+				var timeText = $("i[lay_value="+classId+"]").parent().parent().next().find("div").html();
+				text="确定删除"+timeText+"的课程?";
+			}
+			layer.confirm(text, {icon: 7}, function(){
+				$.ajax({
+					type : "POST",
+					url : "/${applicationScope.adminprefix }/danceClass/delClass",
+					data : {"classId" : classId},
+					success : function(data) {
+						tableIns.reload({
+							where: {
+								num:Math.random()
+							}
+							
+						});
+						if(data.result){
+							layer.msg(data.msg,{icon: 1});
+						}else{
+							layer.msg(data.msg,{icon: 2});
+						}
+					},
+					error : function(data) {
+						layer.msg(data.msg,{icon: 2});
+					}
+				});
+			})
+		}
 	</script>
 </m:Content>
 </m:ContentPage>

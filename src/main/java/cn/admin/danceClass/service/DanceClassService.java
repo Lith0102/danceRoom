@@ -29,5 +29,18 @@ public class DanceClassService {
 		return sqlSession.selectList("danceClassDao.selAllClass");
 	}
 	
+	//修改课程表信息
+	public int updClassData(Map map) {
+		return sqlSession.update("danceClassDao.updClassData",map);
+	}
+	//添加课程信息
+	public int addClassData(Map<String, Object> map) {
+		return sqlSession.insert("danceClassDao.addClassData",map);
+	}
+	//啥好像
+	public int delClass(Map map) {
+		return sqlSession.delete("danceClassDao.delClass",map);
+	}
+	
 	
 }

@@ -1,10 +1,13 @@
 package cn.admin.danceClass.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -49,9 +52,58 @@ public class DanceClassController {
 	//修改课表信息
 	@RequestMapping(value="/updClassData")
 	@ResponseBody
-	public Map<String,Object> updClassData(){
+	public Map<String,Object> updClassData(@RequestParam Map map){
 		Map<String,Object> result = new HashMap<String,Object>();
+		String updvalue = map.get("updvalue")+"";
+		if(StringUtils.isEmpty(updvalue)){
+			map.put(map.get("updkey")+"", " ");
+		}else{
+			map.put(map.get("updkey")+"", updvalue);
+		}
 		
+		int row = danceClassService.updClassData(map);
+		if(row>0) {
+			result.put("result",true);
+			result.put("msg", "修改成功！");
+		}else {
+			result.put("result", false);
+			result.put("msg", "修改失败！");
+		}
+		return result;
+	}
+	
+	//添加课表时间信息
+	@RequestMapping(value="/addClassData")
+	@ResponseBody
+	public Map<String,Object> addClassData(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		map.put("createTime", sdf.format(new Date()));
+		int row = danceClassService.addClassData(map);
+		if(row>0){
+			map.put("result", true);
+			map.put("msg", "添加成功，请完善课程信息！");
+		}else {
+			map.put("result", false);
+			map.put("msg", "添加失败！");
+		}
+		return map;
+		
+	}
+	
+	//删除课表信息
+	@RequestMapping(value="/delClass")
+	@ResponseBody
+	public Map<String,Object> delClass(@RequestParam Map map){
+		Map<String,Object> result = new HashMap<String,Object>();
+		int row = danceClassService.delClass(map);
+		if(row>0){
+			result.put("result", true);
+			result.put("msg", "删除成功!");
+		}else {
+			result.put("result", false);
+			result.put("msg", "删除失败!");
+		}
 		return result;
 	}
 	

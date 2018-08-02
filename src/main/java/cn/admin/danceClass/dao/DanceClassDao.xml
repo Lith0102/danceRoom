@@ -6,7 +6,52 @@
 	
 	<!-- 查询所有课程 -->
 	<select id="selAllClass" resultType="hashmap">
-		select * from danceclass
-	</select>	
+		select * from danceclass 
+		order by createTime ASC
+	</select>
+	
+	<!-- 修改课程表信息 -->
+	<update id="updClassData" parameterType="hashmap">
+		update danceclass set 
+		<if test="danceTime!=null and danceTime!='' ">
+			danceTime=#{danceTime}
+		</if>
+		<if test="monday!=null and monday!='' ">
+			monday=#{monday}
+		</if>
+		<if test="tuesday!=null and tuesday!='' ">
+			tuesday=#{tuesday}
+		</if>
+		<if test="wednesday!=null and wednesday!='' ">
+			wednesday=#{wednesday}
+		</if>
+		<if test="thursday!=null and thursday!='' ">
+			thursday=#{thursday}
+		</if>
+		<if test="friday!=null and friday!='' ">
+			friday=#{friday}
+		</if>
+		<if test="saturday!=null and saturday!='' ">
+			saturday=#{saturday}
+		</if>
+		<if test="sunday!=null and sunday!='' ">
+			sunday=#{sunday}
+		</if>
+		where Id=#{classId}
+	</update>
+	<!-- 添加课程信息 -->
+	<insert id="addClassData" parameterType="hashmap" useGeneratedKeys="true" keyProperty="classId" >
+		insert into danceclass (createTime) values (#{createTime})
+	</insert>	
 
+	<!-- 删除课程信息 -->
+	<delete id="delClass" parameterType="hashmap">
+		delete from danceclass where 
+		<if test="classId!=0">
+			Id=#{classId}
+		</if>
+		<if test="classId==0">
+			Id!=0
+		</if>
+	</delete>
 </mapper>
