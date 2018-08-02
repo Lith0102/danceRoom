@@ -19,7 +19,7 @@ import cn.core.Authorize;
  *
  * @data 2018年7月31日 下午1:16:08
  * 
- * @Title: 课程表排课
+ * @Title: 课程管理
  *
  */
 @Controller
@@ -28,6 +28,8 @@ public class DanceClassController {
 	
 	@Autowired
 	DanceClassService danceClassService;
+	
+	//------------------课表排课----------------------
 	
 	//课表页面
 	@RequestMapping(value="/timetable")
@@ -106,5 +108,13 @@ public class DanceClassController {
 		}
 		return result;
 	}
+	
+	//--------------------课程计划-------------------
+	@RequestMapping(value="/classPlanFace")
+	@Authorize(setting="课程-课程计划")
+	public ModelAndView classPlan(){
+		return new ModelAndView("admin/classplan/list");
+	}
+	
 	
 }
