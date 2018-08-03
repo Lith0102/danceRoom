@@ -186,13 +186,6 @@
 				/* if(!check()){
 					return false;
 				} */
-				var array = new Array();
-				$("input[name='chosen']").each(function(){
-					var type = $(this).val();
-					var id = $(this).data('id');
-					array.push({productType:type,productId:id});
-				})
-				$("#ids").val(JSON.stringify(array));
 				var success = function(response){
 					if(response.result){
 						layer.alert(response.msg, {
@@ -210,7 +203,7 @@
 					}
 				}
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/coupon/addCoupon', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/danceClass/addClassPrice', postData, success, 'post', 'json');
 				return false;
 			})
 			//自定义验证规则

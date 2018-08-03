@@ -124,5 +124,15 @@ public class DanceClassController {
 		return new ModelAndView("admin/class/classprice/list",map);
 	}
 	
+	@RequestMapping(value="/addClassPrice")
+	@ResponseBody
+	public Map addClassPrice(@RequestParam Map map) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("result", true);
+		result.put("msg", "保存成功！");
+		return result;
+	}
+	
+	
 	
 }
