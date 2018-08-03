@@ -119,7 +119,9 @@ public class DanceClassController {
 	@RequestMapping(value="/classPrice")
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPrice(){
-		return new ModelAndView("admin/class/classprice/list");
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("test", "1,2,3");
+		return new ModelAndView("admin/class/classprice/list",map);
 	}
 	
 	

@@ -28,7 +28,7 @@
 <m:Content contentPlaceHolderId="content">
 	<!-- 内容主体区域 -->
 	<div style="padding: 15px;" class="layui-anim layui-anim-upbit">
-		<blockquote class="layui-elem-quote layui-bg-blue">
+		<blockquote class="layui-elem-quote">
 			课程表
 		</blockquote>
 		<!-- <div class="yw_cx">
