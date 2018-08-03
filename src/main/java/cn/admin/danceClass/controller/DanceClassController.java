@@ -90,7 +90,6 @@ public class DanceClassController {
 			map.put("msg", "添加失败！");
 		}
 		return map;
-		
 	}
 	
 	//删除课表信息
