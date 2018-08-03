@@ -35,7 +35,7 @@ public class DanceClassController {
 	@RequestMapping(value="/timetable")
 	@Authorize(setting="课程-课程表")
 	public ModelAndView timetable() {
-		return new ModelAndView("admin/class/timetable");
+		return new ModelAndView("admin/class/timetable/list");
 	}
 	
 	//课表数据
@@ -112,7 +112,14 @@ public class DanceClassController {
 	@RequestMapping(value="/classPlanFace")
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPlan(){
-		return new ModelAndView("admin/classplan/list");
+		return new ModelAndView("admin/class/classplan/list");
+	}
+	
+	//--------------------课程费用-------------------
+	@RequestMapping(value="/classPrice")
+	@Authorize(setting="课程-课程计划")
+	public ModelAndView classPrice(){
+		return new ModelAndView("admin/class/classprice/list");
 	}
 	
 	
