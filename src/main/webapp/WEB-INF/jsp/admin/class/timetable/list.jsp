@@ -357,30 +357,8 @@
 					}
 				}
 				
-				
-				/* if((chekcLength>0 && chekcLength!=6) || firstCheck>0){
-					$("#delClass").find("span").html("确认删除");
-				}else if((chekcLength==6 &&　firstCheck==0) || chekcLength==0){
-					$("#delClass").find("span").html("取消删除");
-				} */
 			});
 
-			
-			//搜索，重置表格
-			$('.search').click(function() { 
-				tableIns.reload({
-					where: { //设定异步数据接口的额外参数，任意设
-						name: $('input[name="name"]').val(),
-						isFreeze: $('select[name="isFreeze"]').val(),
-						registrationDate: $("#registrationDate").val(),
-						userType:$("select[name='userType']").val(),
-						num:Math.random()
-					},
-					page: {
-						curr: 1 //重新从第 1 页开始
-					}
-				});
-			});
 			//监听操作
 			table.on('tool(tableContent)', function(obj){
 				var data = obj.data; //获得当前行数据
@@ -410,59 +388,7 @@
 					deleteid(ids,layer, tableIns);
 				})
 			});
-			//批量删除
-			function deleteid(ids,layer, tableIns){
-				$.ajax({
-					type : "POST",
-					url : "/${applicationScope.adminprefix }/consumer/deleteids",
-					async : false,
-					data : {
-						"ids" : ids
-					},
-					success : function(data) {
-						tableIns.reload({
-							where: {
-								num:Math.random()
-							},
-							page: {
-								curr: 1 //重新从第 1 页开始
-							}
-						});
-						layer.alert(data.msg,{icon: 1});
-					},
-					error : function(data) {
-						layer.alert(data.msg,{icon: 2});
-					}
-				});
-			}
-			//删除
-			function deletes(userId){
-				layer.confirm('确定删除吗？', {icon: 7}, function(){
-					$.ajax({
-						type : "POST",
-						url : "/${applicationScope.adminprefix }/consumer/deletes",
-						data : {"userId" : userId},
-						success : function(data) {
-							tableIns.reload({
-								where: { //设定异步数据接口的额外参数，任意设
-									num:Math.random()
-								},
-								page: {
-									curr: 1 //重新从第 1 页开始
-								}
-							});
-							if(data.success){
-								layer.alert(data.msg,{icon: 1});
-							}else{
-								layer.alert(data.msg,{icon: 2});
-							}
-						},
-						error : function(data) {
-							layer.alert(data.msg,{icon: 2});
-						}
-					});
-				})
-			}
+			
 			//刷新页面
 			function reload(){
 				tableIns.reload({
@@ -518,7 +444,11 @@
 				text="确定删除全部课程?";
 			}else{
 				var timeText = $("i[lay_value="+classId+"]").parent().parent().next().find("div").html();
-				text="确定删除"+timeText+"的课程?";
+				if(timeText==null || timeText==''){
+					text="确定删除该空白课程?";
+				}else{
+					text="确定删除"+timeText+"的课程?";
+				}
 			}
 			layer.confirm(text, {icon: 7}, function(){
 				$.ajax({
