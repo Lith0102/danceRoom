@@ -41,6 +41,17 @@ public class DanceClassService {
 	public int delClass(Map map) {
 		return sqlSession.delete("danceClassDao.delClass",map);
 	}
-	
-	
+	//查询价格信息
+	public Map<String, Object> selPriceInfo() {
+		return sqlSession.selectOne("danceClassDao.selPriceInfo");
+	}
+	//保存信息
+	public int selisHaveInfo(Map map) {
+		return sqlSession.insert("danceClassDao.selisHaveInfo",map);
+	}
+	//修改信息
+	public int updClassPriceInfo(Map map) {
+		return sqlSession.update("danceClassDao.updClassPriceInfo",map);
+	}
+
 }

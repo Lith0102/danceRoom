@@ -120,7 +120,7 @@ public class DanceClassController {
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPrice(){
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("test", "1,2,3");
+		map = danceClassService.selPriceInfo(); 
 		return new ModelAndView("admin/class/classprice/list",map);
 	}
 	
@@ -128,8 +128,22 @@ public class DanceClassController {
 	@ResponseBody
 	public Map addClassPrice(@RequestParam Map map) {
 		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("result", true);
-		result.put("msg", "保存成功！");
+		//先查询是否存在数据
+		String priceId = map.get("priceId")+"";
+		int countInfo = 0;
+		if(StringUtils.isEmpty(priceId)){//当数据不存在时，保存信息
+			countInfo = danceClassService.selisHaveInfo(map);
+		}else{//当存在时，进行修改
+			countInfo = danceClassService.updClassPriceInfo(map);
+		}
+		if(countInfo>0){
+			result.put("result", true);
+			result.put("msg", "保存成功！");
+		}else {
+			result.put("result", false);
+			result.put("msg", "保存失败！");
+		}
+		
 		return result;
 	}
 	

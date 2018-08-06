@@ -39,10 +39,11 @@
 	</blockquote>
 		<div class="layui-field-box" style=" border-color:#666; border-radius:3px; padding:10px;">
 			<form class="layui-form">
+			<input type="hidden" name="priceId" id="priceId" value="${Id}">
             	<div class="layui-form-item">
 					<label class="layui-form-label"><span class="must">*</span>舞蹈班地址：</label>
 					<div class="layui-input-block">
-						<input type="text" ${type==3?'disabled':'' } name="address" id="address" value="${data.address }" lay-verify="address"  autocomplete="off" class="layui-input" />
+						<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input" />
 					</div>
 				</div>
 				<!-- 季度详情 -->
@@ -54,30 +55,30 @@
 						<label class="layui-form-label" style="width: 50px;padding-left: 0px;">原价：</label>
 					</div>
 					<div class="layui-input-inline">
-							<input type="text"  placeholder="￥" lay-verify="jidu" value="${data.jidu}" name="jidu" id="jidu"  autocomplete="off" class="layui-input" style="width: 120%;">
+							<input type="text"  placeholder="￥" lay-verify="jidu" value="${jidu}" name="jidu" id="jidu"  autocomplete="off" class="layui-input" style="width: 120%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">活动价：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text"  placeholder="￥" lay-verify="jiduActivity" value="${data.jiduActivity}" name="jiduActivity" id="jiduActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
+						<input type="text"  placeholder="￥" lay-verify="jiduActivity" value="${jiduActivity}" name="jiduActivity" id="jiduActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">课时：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text" lay-verify="jiduHour" value="${data.jiduHour}" name="jiduHour" id="jiduHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
+						<input type="text" lay-verify="jiduHour" value="${jiduHour}" name="jiduHour" id="jiduHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
 					</div>
 					<div class="layui-form-item" id="jiduChexkbox" style="margin-top: 20px;">
-						<input type="hidden" name="jiduGift" id="jiduGift" >
+						<input type="hidden" name="jiduGift" id="jiduGift" value="${jiduGift}">
 						<label class="layui-form-label">季度赠品:</label>
 						<div class="layui-input-block">
-						      <input type="checkbox" lay-filter="jiduall"  name="jiduall" id="jiduall" value="0" title="全部赠送">
-						      <input type="checkbox" lay-filter="jidudong" name="jidudong" id="jidudong" value="1" title="冬季练功服">
-						      <input type="checkbox" lay-filter="jiduxia" name="jiduxia" id="qikanCheck" value="2" title="夏季练功服">
-						      <input type="checkbox" lay-filter="jiduxie" name="jiduxie" id="jiduxie" value="3" title="舞蹈鞋">
-						      <input type="checkbox" lay-filter="jiduku" name="jiduku" id="jiduku" value="4" title="打底裤">
-						      <input type="checkbox" lay-filter="jidubei" name="jidubei" id="jidubei" value="5" title="水杯">
+						      <input type="checkbox" lay-filter="jiduall"  name="jiduall" id="jiduall" value="0" title="全部赠送" <c:if test="${fn:contains(jiduGift,'0')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="jidudong" name="jidudong" id="jidudong" value="1" title="冬季练功服" <c:if test="${fn:contains(jiduGift,'1')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="jiduxia" name="jiduxia" id="qikanCheck" value="2" title="夏季练功服" <c:if test="${fn:contains(jiduGift,'2')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="jiduxie" name="jiduxie" id="jiduxie" value="3" title="舞蹈鞋" <c:if test="${fn:contains(jiduGift,'3')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="jiduku" name="jiduku" id="jiduku" value="4" title="打底裤" <c:if test="${fn:contains(jiduGift,'4')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="jidubei" name="jidubei" id="jidubei" value="5" title="水杯" <c:if test="${fn:contains(jiduGift,'5')==true}">checked</c:if>>
 					    </div>
 					</div>
 				</div>
@@ -90,30 +91,30 @@
 						<label class="layui-form-label" style="width: 50px;padding-left: 0px;">原价：</label>
 					</div>
 					<div class="layui-input-inline">
-							<input type="text"  placeholder="￥" lay-verify="bannian" value="${data.bannian}" name="bannian" id="bannian"  autocomplete="off" class="layui-input" style="width: 120%;">
+							<input type="text"  placeholder="￥" lay-verify="bannian" value="${bannian}" name="bannian" id="bannian"  autocomplete="off" class="layui-input" style="width: 120%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">活动价：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text"  placeholder="￥" lay-verify="bannianActivity" value="${data.bannianActivity}" name="bannianActivity" id="bannianActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
+						<input type="text"  placeholder="￥" lay-verify="bannianActivity" value="${bannianActivity}" name="bannianActivity" id="bannianActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">课时：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text" lay-verify="bannianHour" value="${data.bannianHour}" name="bannianHour" id="bannianHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
+						<input type="text" lay-verify="bannianHour" value="${bannianHour}" name="bannianHour" id="bannianHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
 					</div>
 					<div class="layui-form-item" id="bannianChexkbox" style="margin-top: 20px;">
-						<input type="hidden" name="bannianGift" id="bannianGift" >
+						<input type="hidden" name="bannianGift" id="bannianGift" value="${bannianGift}">
 						<label class="layui-form-label">半年赠品:</label>
 						<div class="layui-input-block">
-						      <input type="checkbox" lay-filter="bannianall"  name="bannianall" id="bannianall" value="0" title="全部赠送">
-						      <input type="checkbox" lay-filter="banniandong" name="banniandong" id="banniandong" value="1" title="冬季练功服">
-						      <input type="checkbox" lay-filter="bannianxia" name="bannianxia" id="bannianxia" value="2" title="夏季练功服">
-						      <input type="checkbox" lay-filter="bannianxie" name="bannianxie" id="bannianxie" value="3" title="舞蹈鞋">
-						      <input type="checkbox" lay-filter="bannianku" name="bannianku" id="bannianku" value="4" title="打底裤">
-						      <input type="checkbox" lay-filter="bannianbei" name="bannianbei" id="bannianbei" value="5" title="水杯">
+						      <input type="checkbox" lay-filter="bannianall"  name="bannianall" id="bannianall" value="0" title="全部赠送" <c:if test="${fn:contains(bannianGift,'0')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="banniandong" name="banniandong" id="banniandong" value="1" title="冬季练功服" <c:if test="${fn:contains(bannianGift,'1')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="bannianxia" name="bannianxia" id="bannianxia" value="2" title="夏季练功服" <c:if test="${fn:contains(bannianGift,'2')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="bannianxie" name="bannianxie" id="bannianxie" value="3" title="舞蹈鞋" <c:if test="${fn:contains(bannianGift,'3')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="bannianku" name="bannianku" id="bannianku" value="4" title="打底裤" <c:if test="${fn:contains(bannianGift,'4')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="bannianbei" name="bannianbei" id="bannianbei" value="5" title="水杯" <c:if test="${fn:contains(bannianGift,'5')==true}">checked</c:if>>
 					    </div>
 					</div>
 				</div>
@@ -126,30 +127,30 @@
 						<label class="layui-form-label" style="width: 50px;padding-left: 0px;">原价：</label>
 					</div>
 					<div class="layui-input-inline">
-							<input type="text"  placeholder="￥" lay-verify="years" value="${data.years}" name="years" id="years"  autocomplete="off" class="layui-input" style="width: 120%;">
+							<input type="text"  placeholder="￥" lay-verify="years" value="${years}" name="years" id="years"  autocomplete="off" class="layui-input" style="width: 120%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">活动价：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text"  placeholder="￥" lay-verify="yearActivity" value="${data.yearActivity}" name="yearActivity" id="yearActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
+						<input type="text"  placeholder="￥" lay-verify="yearActivity" value="${yearActivity}" name="yearActivity" id="yearActivity"  autocomplete="off" class="layui-input" style="width: 120%;margin-left: -10%;">
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label" style="margin-left: -10%;">课时：</label>
 					</div>
 					<div class="layui-inline">
-						<input type="text" lay-verify="yearHour" value="${data.yearHour}" name="yearHour" id="yearHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
+						<input type="text" lay-verify="yearHour" value="${yearHour}" name="yearHour" id="yearHour"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
 					</div>
 					<div class="layui-form-item" id="yearChexkbox" style="margin-top: 20px;">
-						<input type="hidden" name="yearGift" id="yearGift" >
+						<input type="hidden" name="yearGift" id="yearGift" value="${yearGift}">
 						<label class="layui-form-label">全年赠品:</label>
 						<div class="layui-input-block">
-						      <input type="checkbox" lay-filter="yearall"  name="yearall" id="yearall" value="0" title="全部赠送">
-						      <input type="checkbox" lay-filter="yeardong" name="yeardong" id="yeardong" value="1" title="冬季练功服" <c:if test="${fn:contains(test,'1')==true}">checked</c:if> >
-						      <input type="checkbox" lay-filter="yearxia" name="yearxia" id="yearxia" value="2" title="夏季练功服">
-						      <input type="checkbox" lay-filter="yearxie" name="yearxie" id="yearxie" value="3" title="舞蹈鞋">
-						      <input type="checkbox" lay-filter="yearku" name="yearku" id="yearku" value="4" title="打底裤" <c:if test="${fn:contains(test,'4')==true}">checked</c:if>>
-						      <input type="checkbox" lay-filter="yearbei" name="yearbei" id="yearbei" value="5" title="水杯">
+						      <input type="checkbox" lay-filter="yearall"  name="yearall" id="yearall" value="0" title="全部赠送" <c:if test="${fn:contains(yearGift,'0')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="yeardong" name="yeardong" id="yeardong" value="1" title="冬季练功服" <c:if test="${fn:contains(yearGift,'1')==true}">checked</c:if> >
+						      <input type="checkbox" lay-filter="yearxia" name="yearxia" id="yearxia" value="2" title="夏季练功服" <c:if test="${fn:contains(yearGift,'2')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="yearxie" name="yearxie" id="yearxie" value="3" title="舞蹈鞋" <c:if test="${fn:contains(yearGift,'3')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="yearku" name="yearku" id="yearku" value="4" title="打底裤" <c:if test="${fn:contains(yearGift,'4')==true}">checked</c:if>>
+						      <input type="checkbox" lay-filter="yearbei" name="yearbei" id="yearbei" value="5" title="水杯" <c:if test="${fn:contains(yearGift,'5')==true}">checked</c:if>>
 					    </div>
 					</div>
 				</div>
@@ -157,8 +158,8 @@
 				<div class="layui-form-item">
 				    <label class="layui-form-label"><span class="must">*</span>是否启用活动价：</label>
 				    <div class="layui-input-block">
-				      <input type="radio"  name="isActivity" value="0" title="否" <c:if test="${data.isActivity==0 || data.isActivity==null}">checked</c:if> >
-				      <input type="radio"  name="isActivity" value="1" title="是" <c:if test="${data.isActivity==1}">checked</c:if> >
+				      <input type="radio"  name="isActivity" value="0" title="否" <c:if test="${isActivity==0 || isActivity==null}">checked</c:if> >
+				      <input type="radio"  name="isActivity" value="1" title="是" <c:if test="${isActivity==1}">checked</c:if> >
 				    </div>
 				</div>
 				
@@ -186,20 +187,11 @@
 				/* if(!check()){
 					return false;
 				} */
-				var success = function(response){
-					if(response.result){
-						layer.alert(response.msg, {
-							icon: 1
-						}, function() {
-							var index = parent.layer.getFrameIndex(window.name);
-							 parent.layer.close(index)
-						});
+				var success = function(data){
+					if(data.result){
+						layer.msg(data.msg, {icon: 1});
 					}else{
-						layer.alert(response.msg, {
-							icon: 2
-						}, function() {
-							layer.closeAll();
-						});
+						layer.msg(data.msg, {icon: 2});
 					}
 				}
 				var postData = $(data.form).serialize();
@@ -208,6 +200,7 @@
 			})
 			//自定义验证规则
 			form.verify({
+				
 				address: function(value) {
 					if(value.length < 3) {
 						return '请填写舞蹈班名称及位置';
@@ -220,14 +213,17 @@
 					}
 				},
 				jiduActivity:function(value){
+					var isActivity = $("input[name='isActivity']:checked").val();
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value!=null && value!='' && !regPos.test(value)){
-						return '请填写正确的季度活动价格';
+					if(isActivity==1){
+						if(value==null || value=='' || !regPos.test(value)){
+							return '请填写正确的季度活动价格';
+						}
 					}
 				},
 				jiduHour:function(value){
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value==null && value=='' && !regPos.test(value)){
+					if(value==null || value=='' || !regPos.test(value)){
 						return '请填写正确的季度课时';
 					}
 				},
@@ -238,14 +234,18 @@
 					}
 				},
 				bannianActivity:function(value){
+					var isActivity = $("input[name='isActivity']:checked").val();
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value==null && value=='' && !regPos.test(value)){
-						return '请填写正确的半年活动价';
+					if(isActivity==1){
+						if(value==null || value=='' || !regPos.test(value)){
+							return '请填写正确的半年活动价';
+						}
 					}
+					
 				},
 				bannianHour:function(value){
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value==null && value=='' && !regPos.test(value)){
+					if(value==null || value=='' || !regPos.test(value)){
 						return '请填写正确的半年课时';
 					}
 				},
@@ -256,17 +256,22 @@
 					}
 				},
 				yearActivity:function(value){
+					var isActivity = $("input[name='isActivity']:checked").val();
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value==null && value=='' && !regPos.test(value)){
-						return '请填写正确的全年活动价';
+					if(isActivity==1){
+						if(value==null || value=='' || !regPos.test(value)){
+							return '请填写正确的全年活动价';
+						}
 					}
+					
 				},
 				yearHour:function(value){
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
-					if(value==null && value=='' && !regPos.test(value)){
+					if(value==null || value=='' || !regPos.test(value)){
 						return '请填写正确的全年课时';
 					}
 				}
+				
 				
 			});
 		
