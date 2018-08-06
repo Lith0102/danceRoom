@@ -4,12 +4,12 @@
 
 <mapper namespace="danceClassDao">
 	
+	<!--////////////////////  课表     //////////////////////////-->
 	<!-- 查询所有课程 -->
 	<select id="selAllClass" resultType="hashmap">
 		select * from danceclass 
 		order by createTime ASC
 	</select>
-	
 	<!-- 修改课程表信息 -->
 	<update id="updClassData" parameterType="hashmap">
 		update danceclass set 
@@ -43,7 +43,6 @@
 	<insert id="addClassData" parameterType="hashmap" useGeneratedKeys="true" keyProperty="classId" >
 		insert into danceclass (createTime) values (#{createTime})
 	</insert>	
-
 	<!-- 删除课程信息 -->
 	<delete id="delClass" parameterType="hashmap">
 		delete from danceclass where 
@@ -55,12 +54,30 @@
 		</if>
 	</delete>
 	
+	<!--////////////////////  教学计划     //////////////////////////-->
+	
+	
+	<!--////////////////////  教学内容     //////////////////////////-->
+	<!-- 查询教学内容 -->
+	<select id="selClassContent" resultType="hashmap">
+		select * from classcontent where Id>0
+	</select>
+	<!-- 添加教学内容 -->
+	<insert id="addClassContent" parameterType="hashmap">
+		insert into classcontent (title,content,updateTime) values (#{title},#{content},now());
+	</insert>
+	<update id="updClassContent" parameterType="hashmap">
+		update classcontent set title=#{title},content=#{content},updateTime=now()
+		where Id=#{contentId}
+	</update>
+	
+	<!--////////////////////  课程费用     //////////////////////////-->
 	<!-- 查询价格信息 -->
 	<select id="selPriceInfo" resultType="hashmap">
 		select * from classprice where Id!=0
 	</select>
 	<!-- 保存价格信息 -->
-	<insert id="selisHaveInfo" parameterType="hashmap">
+	<insert id="addClassPriceInfo" parameterType="hashmap">
 		insert into classprice (address,
 		jidu,<if test="jiduActivity!=null and jiduActivity!=''">jiduActivity,</if>jiduHour,jiduGift,
 		bannian,<if test="bannianActivity!=null and bannianActivity!=''">bannianActivity,</if>bannianHour,bannianGift,
@@ -77,4 +94,8 @@
 		years=#{years},<if test="yearActivity!=null and yearActivity!=''">yearActivity=#{yearActivity},</if>yearHour=#{yearHour},yearGift=#{yearGift},isActivity=#{isActivity}
 		where Id=#{priceId}
 	</update>
+	
+	<!--////////////////////  课程评估     //////////////////////////-->
+	
+	
 </mapper>

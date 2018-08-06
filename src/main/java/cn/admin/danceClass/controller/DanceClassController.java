@@ -115,6 +115,34 @@ public class DanceClassController {
 		return new ModelAndView("admin/class/classplan/list");
 	}
 	
+	//--------------------教学内容-------------------
+	@RequestMapping(value="/classContent")
+	@Authorize(setting="课程-教学内容")
+	public ModelAndView classContent(){
+		Map<String,Object> map = danceClassService.selClassContent();
+		return new ModelAndView("admin/class/classcontent/list",map);
+	}
+	@RequestMapping(value="/addClassContent")
+	@ResponseBody
+	public Map<String,Object> addClassContent(@RequestParam Map map){
+		Map<String,Object> result = new HashMap<String,Object>();
+		String contentId = map.get("contentId")+"";
+		int row = 0;
+		if(StringUtils.isEmpty(contentId)){
+			row = danceClassService.addClassContent(map);
+		}else {
+			row = danceClassService.updClassContent(map);
+		}
+		if(row>0){
+			result.put("result", true);
+			result.put("msg", "保存成功！");
+		}else{
+			result.put("result", false);
+			result.put("msg", "保存失败！");
+		}
+		return result;
+	} 
+	
 	//--------------------课程费用-------------------
 	@RequestMapping(value="/classPrice")
 	@Authorize(setting="课程-课程计划")
@@ -132,7 +160,7 @@ public class DanceClassController {
 		String priceId = map.get("priceId")+"";
 		int countInfo = 0;
 		if(StringUtils.isEmpty(priceId)){//当数据不存在时，保存信息
-			countInfo = danceClassService.selisHaveInfo(map);
+			countInfo = danceClassService.addClassPriceInfo(map);
 		}else{//当存在时，进行修改
 			countInfo = danceClassService.updClassPriceInfo(map);
 		}
@@ -147,6 +175,11 @@ public class DanceClassController {
 		return result;
 	}
 	
-	
+	//-----------------------教学评估-----------------------
+	@RequestMapping(value="/classAssessment")
+	@Authorize(setting="课程-教学评估")
+	public ModelAndView classAssessment(){
+		return new ModelAndView("admin/class/classassessment/list");
+	}
 	
 }

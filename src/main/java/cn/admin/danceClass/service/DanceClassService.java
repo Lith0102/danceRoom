@@ -24,11 +24,11 @@ public class DanceClassService {
 	@Autowired
 	SqlSession sqlSession;
 	
+	//-------------------课表-------------
 	//查询所有课程
 	public List<Map> selAllClass() {
 		return sqlSession.selectList("danceClassDao.selAllClass");
 	}
-	
 	//修改课程表信息
 	public int updClassData(Map map) {
 		return sqlSession.update("danceClassDao.updClassData",map);
@@ -37,21 +37,44 @@ public class DanceClassService {
 	public int addClassData(Map<String, Object> map) {
 		return sqlSession.insert("danceClassDao.addClassData",map);
 	}
-	//啥好像
+	//删除课表信息
 	public int delClass(Map map) {
 		return sqlSession.delete("danceClassDao.delClass",map);
 	}
+	
+	//----------------课程计划---------------
+	
+	
+	//----------------教学内容---------------
+	//查询教学内容
+	public Map<String, Object> selClassContent() {
+		return sqlSession.selectOne("danceClassDao.selClassContent");
+	}
+	//添加教学内容
+	public int addClassContent(Map map) {
+		return sqlSession.insert("danceClassDao.addClassContent",map);
+	}
+	//修改教学内容
+	public int updClassContent(Map map) {
+		return sqlSession.update("danceClassDao.updClassContent",map);
+	}
+	
+	
+	//---------------课程费用----------------
 	//查询价格信息
 	public Map<String, Object> selPriceInfo() {
 		return sqlSession.selectOne("danceClassDao.selPriceInfo");
 	}
-	//保存信息
-	public int selisHaveInfo(Map map) {
-		return sqlSession.insert("danceClassDao.selisHaveInfo",map);
+	//保存价格信息
+	public int addClassPriceInfo(Map map) {
+		return sqlSession.insert("danceClassDao.addClassPriceInfo",map);
 	}
-	//修改信息
+	//修改价格信息
 	public int updClassPriceInfo(Map map) {
 		return sqlSession.update("danceClassDao.updClassPriceInfo",map);
 	}
+	
+	//--------------教学评估----------------------
+	
 
 }

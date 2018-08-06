@@ -275,21 +275,7 @@
 				
 			});
 		
-			$("#closeWindow").click(function(){
-				closewindow();
-			})
 			
-			form.on('radio(couponType)', function(data){
-				var val = data.value; 
-				if(val==1){
-					$("#typeChexkbox").css("display","inline");
-					$("#typeRadio").css("display","none");
-				}else{
-					$("#typeChexkbox").css("display","none");
-					$("#typeRadio").css("display","inline");
-				}
-				
-			});
 			//季度赠品全选操作
 			form.on('checkbox(jiduall)', function(data){
 				var allisCheck = $(this).is(':checked');//判断全选按钮是否选中 （boolean）
