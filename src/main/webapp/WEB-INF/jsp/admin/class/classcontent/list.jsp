@@ -35,7 +35,7 @@
 <m:Content contentPlaceHolderId="content">
 	<div style="padding:0 30px" class="layui-anim layui-anim-upbit">
 	<blockquote class="layui-elem-quote nowPage">
-			教学内容
+		教学内容
 	</blockquote>
 		<div class="layui-field-box" style=" border-color:#666; border-radius:3px; padding:10px;">
 			<form class="layui-form">
