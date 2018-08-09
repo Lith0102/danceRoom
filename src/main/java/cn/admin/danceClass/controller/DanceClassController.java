@@ -112,9 +112,33 @@ public class DanceClassController {
 	@RequestMapping(value="/classPlanFace")
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPlan(){
+		
 		Map<String,Object> map = new HashMap<String,Object>();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date now = new Date();
+		String nowYear = sdf.format(now);//当前年份
+		map.put("nowYear", nowYear);
+		//查询学生列表
 		List<Map> list = danceClassService.selStudentList();
 		map.put("stuList", net.sf.json.JSONArray.fromObject(list));
+		//查询计划信息
+		Map<String,Object> planmap = danceClassService.selPlanInfo(nowYear);
+		if(planmap==null){//当不存在该年的信息时，进行新增
+			danceClassService.addPlanInfo(nowYear);
+		}else {//当该年信息已存在时，进行信息查询回显
+			String planText = map.get("plan")+"";//获取计划内容的json串
+			if(StringUtils.isEmpty(planText)){
+				map.put("planInfo", "");
+			}else {
+				map.put("planInfo", "解析后的json串");
+			}
+		}
+		
+		//查询年份
+		List<Map> yearList = danceClassService.selYearList();
+		map.put("yearList", yearList);
+		
 		return new ModelAndView("admin/class/classplan/list",map);
 	}
 	//添加课程计划
@@ -122,6 +146,16 @@ public class DanceClassController {
 	@ResponseBody
 	public Map addClassPlan(@RequestParam Map map){
 		Map<String,Object> result = new HashMap<String,Object>();
+		Map<String,Object> info = new HashMap<String,Object>();
+		info.put("years", map.get("planyear")+"");
+		//处理所有活动，进行拼接
+		int planSize = Integer.parseInt(map.get("planSize")+"");
+		for (int i = 1; i <= planSize; i++) {
+			
+		}
+		
+		
+		System.out.println(map);
 		result.put("result", true);
 		result.put("msg", "保存成功!");
 		return result;

@@ -70,15 +70,13 @@
 		</div>
 		<div class="layui-field-box" style=" border-color:#666; border-radius:3px; padding:10px;">
 			<form class="layui-form">
-			<input type="hidden" name="planId" id="planId" value="${Id}">
 				<div class="layui-form-item">
 					<label class="layui-form-label">计划年份：</label>
 					<div class="layui-input-inline">
 						<select class="layui-inputs" name="planyear" id="planyear">
-							<option value="0" ${type=='0'?'selected':'' }>2018</option>
-							<option value="1" ${type=='1'?'selected':'' }>2017</option>
-							<option value="2" ${type=='2'?'selected':'' }>2016</option>
-							<option value="3" ${type=='3'?'selected':'' }>2015</option>
+							<c:forEach items="${yearList}" var="yearList">
+								<option value="${yearList.Id}" <c:if test="${yearList.years==nowYear}">selected</c:if> >${yearList.years}</option>
+							</c:forEach>
 						</select>
 					</div>
 				</div>
@@ -158,18 +156,20 @@
 						layer.msg(data.msg, {icon: 2});
 					}
 				}
+				var planSize = $("#allPlans .planDiv").length;
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan?planSize='+planSize, postData, success, 'post', 'json');
 				return false;
 			})
 			
 			function check(){
+				var result = true;
 				var planSize = $("#allPlans .planDiv").length;
 				if(planSize==0){
 					layer.msg("请至少添加一项活动计划！",{icon:2});
-					return false;
+					result = false;
+					return result;
 				}else{
-					
 					$("#allPlans .planDiv").each(function(){
 						var num = $(this).attr("num");
 						var title = $(this).find("input[id='plan"+num+"_planName']").val();
@@ -178,25 +178,27 @@
 						var students = $(this).find("input[id='plan"+num+"_students']").val();
 						if(title==null || title==''){
 							tipinfo("请输入活动标题！","#plan"+num+"_planName");
-							return false;
+							result = false;
+							return result;
 						}
 						if(planTime==null || planTime==''){
 							tipinfo("请输入活动时间！","#plan"+num+"_activityTime");
-							return false;
+							result = false;
+							return result;
 						}
 						if(address==null || address==''){
 							tipinfo("请输入活动地点！","#plan"+num+"_address");
-							return false;
+							result = false;
+							return result;
 						}
 						if(students==null || students==''){
-							debugger;
 							tipinfo("请选择参加的学生！","#id_select"+num);
-							return false;
+							result = false;
+							return result;
 						}
-						return true;
 					})
-					
 				}
+				return result;
 			}
 			
 			//添加计划-拼串
@@ -218,7 +220,7 @@
 				}
 				var newNum = maxNum+1;//最新添加的计划的num值
 				var html = '<div id="plan'+newNum+'" num="'+newNum+'" class="planDiv">'+
-						   '<input type="hidden" name="planNum_'+newNum+'" id="planNum_'+newNum+'" value="'+newNum+'">'+	
+						   //'<input type="hidden" name="planNum_'+newNum+'" id="planNum_'+newNum+'" value="'+newNum+'">'+	
 						   '	<div class="layui-inline"> '+
 						   '		<label class="layui-form-label"><span onclick="delplan('+newNum+',0);" class="delonePlan" style="display:'+display+';"><i class="layui-icon layui-icon-close-fill deloneicon">&#x1007;</i></span><span class="must">*</span>活动计划'+newNum+'：</label>'+
 						   '	</div> '+

@@ -47,6 +47,19 @@ public class DanceClassService {
 	public List<Map> selStudentList() {
 		return sqlSession.selectList("danceClassDao.selStudentList");
 	}
+	//查询课程计划
+	public Map<String, Object> selPlanInfo(String nowYear) {
+		return sqlSession.selectOne("danceClassDao.selPlanInfo", nowYear);
+	}
+	//新增年度计划信息
+	public void addPlanInfo(String nowYear) {
+		sqlSession.insert("danceClassDao.addPlanInfo",nowYear);
+	}
+	//查询年份列表
+	public List<Map> selYearList() {
+		return sqlSession.selectList("danceClassDao.selYearList");
+	}
+	
 	
 	//----------------教学内容---------------
 	//查询教学内容

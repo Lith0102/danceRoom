@@ -5,6 +5,7 @@
 <mapper namespace="danceClassDao">
 	
 	<!--////////////////////  课表     //////////////////////////-->
+	
 	<!-- 查询所有课程 -->
 	<select id="selAllClass" resultType="hashmap">
 		select * from danceclass 
@@ -55,13 +56,28 @@
 	</delete>
 	
 	<!--////////////////////  教学计划     //////////////////////////-->
+	
 	<!-- 查询所有学生信息 -->
 	<select id="selStudentList" resultType="hashmap">
 		select * from student where isDel=0 and isPay=0
 	</select>
+	 <!-- 查询本年的教学计划和活动 -->
+	 <select id="selPlanInfo" parameterType="String" resultType="hashmap">
+	 	select * from classplan where years=#{nowYear}
+	 </select>
+	 <!-- 新增年度计划信息 -->
+	 <select id="addPlanInfo" parameterType="String">
+	 	insert into classplan (years,createTime) values (#{nowYear},now())
+	 </select>
+	 <!-- 查询年份 -->
+	 <select id="selYearList" resultType="hashmap">
+	 	select Id,years from classplan
+	 	order by createTime DESC
+	 </select>
 	 
-	
+	 
 	<!--////////////////////  教学内容     //////////////////////////-->
+	
 	<!-- 查询教学内容 -->
 	<select id="selClassContent" resultType="hashmap">
 		select * from classcontent where Id>0
@@ -76,6 +92,7 @@
 	</update>
 	
 	<!--////////////////////  课程费用     //////////////////////////-->
+	
 	<!-- 查询价格信息 -->
 	<select id="selPriceInfo" resultType="hashmap">
 		select * from classprice where Id!=0
