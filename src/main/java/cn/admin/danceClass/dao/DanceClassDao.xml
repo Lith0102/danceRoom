@@ -55,7 +55,11 @@
 	</delete>
 	
 	<!--////////////////////  教学计划     //////////////////////////-->
-	
+	<!-- 查询所有学生信息 -->
+	<select id="selStudentList" resultType="hashmap">
+		select * from student where isDel=0 and isPay=0
+	</select>
+	 
 	
 	<!--////////////////////  教学内容     //////////////////////////-->
 	<!-- 查询教学内容 -->

@@ -43,7 +43,10 @@ public class DanceClassService {
 	}
 	
 	//----------------课程计划---------------
-	
+	//查询所有学生
+	public List<Map> selStudentList() {
+		return sqlSession.selectList("danceClassDao.selStudentList");
+	}
 	
 	//----------------教学内容---------------
 	//查询教学内容

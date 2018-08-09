@@ -112,7 +112,19 @@ public class DanceClassController {
 	@RequestMapping(value="/classPlanFace")
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPlan(){
-		return new ModelAndView("admin/class/classplan/list");
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<Map> list = danceClassService.selStudentList();
+		map.put("stuList", net.sf.json.JSONArray.fromObject(list));
+		return new ModelAndView("admin/class/classplan/list",map);
+	}
+	//添加课程计划
+	@RequestMapping(value="/addClassPlan")
+	@ResponseBody
+	public Map addClassPlan(@RequestParam Map map){
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("result", true);
+		result.put("msg", "保存成功!");
+		return result;
 	}
 	
 	//--------------------教学内容-------------------

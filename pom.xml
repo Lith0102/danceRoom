@@ -14,14 +14,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-boot.version>1.3.3.RELEASE</spring-boot.version>
-		<start-class>cn.MagazineMallApplication</start-class>
+		<start-class>cn.DanceRoomApplication</start-class>
 		<winsw.version>1.18</winsw.version>
 		<maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
 		<maven-resources-plugin.verion>2.7</maven-resources-plugin.verion>
 		<maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
 		<dist.dir>${project.build.directory}/dist</dist.dir>
 		<dist.service.name>${project.artifactId}</dist.service.name>
-		<dist.service.display.name>MagazineMall</dist.service.display.name>
+		<dist.service.display.name>DanceRoom</dist.service.display.name>
 		<dist.service.description>
 			艺佳艺舞蹈房
 		</dist.service.description>
