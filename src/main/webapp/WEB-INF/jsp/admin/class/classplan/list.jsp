@@ -70,10 +70,11 @@
 		</div>
 		<div class="layui-field-box" style=" border-color:#666; border-radius:3px; padding:10px;">
 			<form class="layui-form">
+				<input type="hidden" name="allNum" id="allNum" value="${allNum}">
 				<div class="layui-form-item">
 					<label class="layui-form-label">计划年份：</label>
 					<div class="layui-input-inline">
-						<select class="layui-inputs" name="planyear" id="planyear">
+						<select class="layui-inputs" name="planyear" id="planyear" lay-filter="planyear">
 							<c:forEach items="${yearList}" var="yearList">
 								<option value="${yearList.Id}" <c:if test="${yearList.years==nowYear}">selected</c:if> >${yearList.years}</option>
 							</c:forEach>
@@ -83,42 +84,43 @@
 				
 				<!-- 活动详情 -->
 				<div id="allPlans">
-					
-					<%-- <div id="plan1" num="1" class="planDiv">
-						<input type="hidden" name="planNum_1" id="planNum_1" value="1">
-						<div class="layui-inline">
-							<label class="layui-form-label"><span class="delonePlan"><i class="layui-icon layui-icon-close-fill deloneicon">&#x1007;</i></span><span class="must">*</span>活动计划：</label>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 60px;padding-left: 0px;">标题：</label>
-						</div>
-						<div class="layui-input-inline">
-							<input type="text"  placeholder="活动名称" lay-verify="plan1_planName" value="${planName}" name="plan1_planName" id="plan1_planName"  autocomplete="off" class="layui-input" style="width: 120%;">
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="margin-left: -10%;">时间：</label>
-						</div>
-						<div class="layui-input-inline">
-					        <input type="text" class="layui-input" lay-verify="plan1_activityTime" id="plan1_activityTime" name="plan1_activityTime" value="${activityTime}" placeholder="请选择活动时间" style="width: 120%;margin-left: -10%;">
-					    </div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="margin-left: -10%;">地点：</label>
-						</div>
-						<div class="layui-inline">
-							<input type="text" placeholder="活动地点" lay-verify="plan1_address" value="${address}" name="plan1_address" id="plan1_address"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
-						</div>
-						<div class="joinStudent" style="margin-top: 20px;">
-							<input type="hidden" name="plan1_students" id="plan1_students" value="${joinStudent}">
-							<label for="id_select" class="layui-form-label"><span class="must">*</span>参加学生：</label>
-							<select id="id_select" class="selectpicker bla bla bli" multiple data-live-search="true">
-							    <option value="1">cow</option>
-							    <option value="2">bull</option>
-							    <option value="3">ASD</option>
-							    <option value="4">Bla</option>
-							    <option value="5">Ble</option>
-							</select>
-						</div> 
-					</div>  --%>
+					<c:if test="${not empty planInfo}">
+						<c:forEach items="${planInfo}" var="list">
+							<div id="plan${list.planNum}" num="${list.planNum}" class="planDiv">
+								<input type="hidden" name="planNum_${list.planNum}" id="planNum_${list.planNum}" value="${list.planNum}">
+								<div class="layui-inline">
+									<label class="layui-form-label"><span onclick="delplan('${list.planNum}');" class="delonePlan" style="display: none"><i class="layui-icon layui-icon-close-fill deloneicon" >&#x1007;</i></span><span class="must">*</span>活动计划${list.planNum}：</label>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 60px;padding-left: 0px;">标题：</label>
+								</div>
+								<div class="layui-input-inline">
+									<input type="text"  placeholder="活动名称" lay-verify="plan${list.planNum}_planName" value="${list.planName}" name="plan${list.planNum}_planName" id="plan${list.planNum}_planName"  autocomplete="off" class="layui-input" style="width: 120%;">
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="margin-left: -10%;">时间：</label>
+								</div>
+								<div class="layui-input-inline">
+							        <input type="text" class="layui-input" lay-verify="plan${list.planNum}_activityTime" id="plan${list.planNum}_activityTime" name="plan${list.planNum}_activityTime" value="${list.activityTime}" placeholder="请选择活动时间" style="width: 120%;margin-left: -10%;">
+							    </div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="margin-left: -10%;">地点：</label>
+								</div>
+								<div class="layui-inline">
+									<input type="text" placeholder="活动地点" lay-verify="plan${list.planNum}_address" value="${list.address}" name="plan${list.planNum}_address" id="plan${list.planNum}_address"  autocomplete="off" class="layui-input" style="width: 122%;margin-left: -10%;">
+								</div>
+								<div class="joinStudent" style="margin-top: 20px;">
+									<input type="hidden" name="plan${list.planNum}_students" id="plan${list.planNum}_students" value="${list.students}">
+									<label id="id_select${list.planNum}" class="layui-form-label"><span class="must">*</span>参加学生：</label>
+									<select id="id_select" num="${list.planNum}" class="selectpicker bla bla bli" multiple data-live-search="true">
+									  	<c:forEach items="${stuList}" var="stuList">
+									  		<option value="${stuList.Id}" <c:if test="${fn:contains(list.students,stuList.Id)==true}">selected</c:if> >${stuList.stuName}</option>
+									  	</c:forEach>
+									</select>
+								</div> 
+							</div>  
+						</c:forEach>
+					</c:if>
 				</div>	
 				<div class="layui-form-item" style="text-align: center;">
 					<button class="layui-btn" style="width: 50%;margin-top: 60px;" id="saveInfo" lay-submit="" lay-filter="addEqBtn">保存</button>
@@ -133,7 +135,7 @@
 <script type="text/javascript" src="/manage/public/js/bootstrap-select.js"></script>
 
 	<script type="text/javascript">
-	var sutdentList = ${stuList};
+	var sutdentList = ${stujsonList};
 	var options = "";
 	$(function(){
 		for(var i = 0;i<sutdentList.length;i++){
@@ -156,9 +158,8 @@
 						layer.msg(data.msg, {icon: 2});
 					}
 				}
-				var planSize = $("#allPlans .planDiv").length;
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan?planSize='+planSize, postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan', postData, success, 'post', 'json');
 				return false;
 			})
 			
@@ -219,10 +220,11 @@
 					display = "inline";
 				}
 				var newNum = maxNum+1;//最新添加的计划的num值
+				$("#allNum").val($("#allNum").val()+newNum+",");
 				var html = '<div id="plan'+newNum+'" num="'+newNum+'" class="planDiv">'+
 						   //'<input type="hidden" name="planNum_'+newNum+'" id="planNum_'+newNum+'" value="'+newNum+'">'+	
 						   '	<div class="layui-inline"> '+
-						   '		<label class="layui-form-label"><span onclick="delplan('+newNum+',0);" class="delonePlan" style="display:'+display+';"><i class="layui-icon layui-icon-close-fill deloneicon">&#x1007;</i></span><span class="must">*</span>活动计划'+newNum+'：</label>'+
+						   '		<label class="layui-form-label"><span onclick="delplan('+newNum+');" class="delonePlan" style="display:'+display+';"><i class="layui-icon layui-icon-close-fill deloneicon">&#x1007;</i></span><span class="must">*</span>活动计划'+newNum+'：</label>'+
 						   '	</div> '+
 						   '	<div class="layui-inline"> '+
 						   '		<label class="layui-form-label" style="width: 60px;padding-left: 0px;">标题：</label> '+
@@ -278,43 +280,33 @@
 				}
 			})
 			
+			//根据年份查询活动
+			form.on('select(planyear)', function(data){
+				var years = data.value;
+			   window.location.href = "/${applicationScope.adminprefix }/danceClass/classPlanFace?planyears="+years;
+			})
+			
 		})
 		
 		//删除活动计划
-		function delplan(planNum,delState){
+		function delplan(planNum){
 			var text = "确定删除'活动计划"+planNum+"'?";
 			layer.confirm(text, {icon: 7}, function(){
-				if(delState==0){//刚添加的空计划
-					$("#plan"+planNum).remove();
-					layer.closeAll('dialog');
-				}else{
-					$.ajax({
-						type : "POST",
-						url : "/${applicationScope.adminprefix }/danceClass/delClassPlan",
-						//data : {"classId" : classId},
-						success : function(data) {
-							if(data.result){
-								layer.msg(data.msg,{icon: 1});
-							}else{
-								layer.msg(data.msg,{icon: 2});
-							}
-						},
-						error : function(data) {
-							layer.msg(data.msg,{icon: 2});
-						}
-					});
-				}
+				
+				$("#plan"+planNum).remove();
+				layer.closeAll('dialog');
+				$("#allNum").val($("#allNum").val().replace(planNum+",",""));
 			})
 		}
     	
 		//初始化下拉多选模块
-		/* $(window).on('load', function() {
+		$(window).on('load', function() {
 			$(".joinStudent .layui-unselect").remove();
 			$('.selectpicker').selectpicker({
 				'selectedText' : 'cat'
 			});
 
-		}); */
+		});
 	</script>
 </m:Content>
 </m:ContentPage>

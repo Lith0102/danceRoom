@@ -74,8 +74,15 @@
 	 	select Id,years from classplan
 	 	order by createTime DESC
 	 </select>
-	 
-	 
+	 <!-- 保存计划信息 -->
+	 <update id="updPlanInfo" parameterType="hashmap">
+	 	update classplan set plan=#{plan},allNum=#{allNum} where Id=#{yearsId}
+	 </update>
+	 <!-- 根据id查询年份 -->
+	 <select id="selYears" parameterType="String" resultType="String">
+	 	select years from classplan where Id=#{planyearId}
+	 </select>
+	  
 	<!--////////////////////  教学内容     //////////////////////////-->
 	
 	<!-- 查询教学内容 -->

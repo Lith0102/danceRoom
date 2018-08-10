@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -111,27 +113,38 @@ public class DanceClassController {
 	//--------------------课程计划-------------------
 	@RequestMapping(value="/classPlanFace")
 	@Authorize(setting="课程-课程计划")
-	public ModelAndView classPlan(){
+	public ModelAndView classPlan(@RequestParam("planyears") String planyearId){
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 		Date now = new Date();
 		String nowYear = sdf.format(now);//当前年份
-		map.put("nowYear", nowYear);
+		
+		if(StringUtils.isEmpty(planyearId)){
+			map.put("nowYear", nowYear);
+		}else {
+			String years = danceClassService.selYears(planyearId);//根据id查询年份
+			map.put("nowYear", years);
+			nowYear = years;
+		}
+		
 		//查询学生列表
 		List<Map> list = danceClassService.selStudentList();
-		map.put("stuList", net.sf.json.JSONArray.fromObject(list));
+		map.put("stuList", list);
+		map.put("stujsonList", net.sf.json.JSONArray.fromObject(list));
 		//查询计划信息
 		Map<String,Object> planmap = danceClassService.selPlanInfo(nowYear);
+		map.put("allNum", planmap.get("allNum")+"");
 		if(planmap==null){//当不存在该年的信息时，进行新增
 			danceClassService.addPlanInfo(nowYear);
 		}else {//当该年信息已存在时，进行信息查询回显
-			String planText = map.get("plan")+"";//获取计划内容的json串
-			if(StringUtils.isEmpty(planText)){
+			String planText = planmap.get("plan")+"";//获取计划内容的json串
+			if(StringUtils.isEmpty(planText) || planText.equals("null")){
 				map.put("planInfo", "");
 			}else {
-				map.put("planInfo", "解析后的json串");
+				List<Map> planList = net.sf.json.JSONArray.fromObject(planText);
+				map.put("planInfo", planList);
 			}
 		}
 		
@@ -144,20 +157,43 @@ public class DanceClassController {
 	//添加课程计划
 	@RequestMapping(value="/addClassPlan")
 	@ResponseBody
-	public Map addClassPlan(@RequestParam Map map){
+	public Map addClassPlan(@RequestParam Map<String,Object> map){
 		Map<String,Object> result = new HashMap<String,Object>();
 		Map<String,Object> info = new HashMap<String,Object>();
-		info.put("years", map.get("planyear")+"");
+		info.put("yearsId", map.get("planyear")+"");
 		//处理所有活动，进行拼接
-		int planSize = Integer.parseInt(map.get("planSize")+"");
-		for (int i = 1; i <= planSize; i++) {
+		String allNum = map.get("allNum").toString().replace(" ", "");
+		String[] numList = allNum.split(",");
+		int newNum = 1;
+		List<Map> infoList = new ArrayList<Map>();
+		String numStr = "";
+		for (String str : numList) { //遍历所有的num值
+			Map<String,Object> ma = new HashMap<String,Object>();
+			for (String obj : map.keySet()) { //遍历map中所有的key值
+				String key = "plan"+str;
+				if(obj.indexOf(key)>=0){
+					String newKey = obj.replace(key+"_", "");
+					ma.put(newKey, map.get(obj)+"");
+				}
+			}
 			
+			ma.put("planNum", newNum);
+			infoList.add(ma);
+			numStr += newNum+""+",";
+			newNum++;
+		}
+		info.put("plan", net.sf.json.JSONArray.fromObject(infoList).toString());
+		info.put("allNum", numStr);
+		//保存计划信息
+		int row = danceClassService.updPlanInfo(info);
+		if(row>0) {
+			result.put("result", true);
+			result.put("msg", "保存成功!");
+		}else {
+			result.put("result", false);
+			result.put("msg", "保存失败!");
 		}
 		
-		
-		System.out.println(map);
-		result.put("result", true);
-		result.put("msg", "保存成功!");
 		return result;
 	}
 	

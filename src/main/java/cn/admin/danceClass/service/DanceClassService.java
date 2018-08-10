@@ -59,6 +59,14 @@ public class DanceClassService {
 	public List<Map> selYearList() {
 		return sqlSession.selectList("danceClassDao.selYearList");
 	}
+	//保存计划信息
+	public int updPlanInfo(Map<String, Object> info) {
+		return sqlSession.update("danceClassDao.updPlanInfo",info);
+	}
+	//根据id查询年份
+	public String selYears(String planyearId) {
+		return sqlSession.selectOne("danceClassDao.selYears",planyearId);
+	}
 	
 	
 	//----------------教学内容---------------
