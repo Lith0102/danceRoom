@@ -31,7 +31,7 @@
 	<!-- 学生列表 -->
 	<select id="selStudentList" parameterType="hashmap" resultType="hashmap">
 		select st.Id,st.stuName,case st.sex when 1 then '男' when 2 then '女' end sexText,st.age,st.fatherName,st.fatherPhone,
-		st.motherName,st.motherPhone,date_format(st.entranceTime , '%Y-%m-%d' '%H:%i:%S') entranceTime,case st.isPay when 0 then '已交费' when 1 then '未交费' end isPayText,
+		st.motherName,st.motherPhone,date_format(st.entranceTime , '%Y-%m-%d') entranceTime,case st.isPay when 0 then '已交费' when 1 then '未交费' end isPayText,
 		sp.shopName,ac.className
 		from student st
 		LEFT JOIN shops sp on st.inShop=sp.Id 
@@ -55,7 +55,10 @@
 		</if>
 		limit #{start},#{pageSize} 
 	</select>
-	
+	<!-- 查询学生信息 -->
+	<select id="selStudentById" parameterType="String" resultType="hashmap">
+		select *,date_format(entranceTime , '%Y-%m-%d') ruxueTime from student where Id=#{stuId}		
+	</select>
 	<!-- 查询店铺列表 -->
 	<select id="selShopList" resultType="hashmap">
 		select * from shops where isDel=0
@@ -64,5 +67,29 @@
 	<select id="selClassList" resultType="hashmap">
 		select * from allclass where isDel=0
 	</select>
+	
+	<!-- 新增学生 -->
+	<insert id="addStudent" parameterType="hashmap">
+		insert into student (stuName,sex,age,<if test="fatherName!=null and fatherName!='' ">fatherName,</if>
+		<if test="fatherPhone!=null and fatherPhone!='' ">fatherPhone,</if>
+		<if test="motherName!=null and motherName!='' ">motherName,</if>
+		<if test="motherPhone!=null and motherPhone!='' ">motherPhone,</if>
+		inShop,inClass,entranceTime,isPay) values
+		(#{stuName},#{sex},#{age},<if test="fatherName!=null and fatherName!='' ">#{fatherName},</if>
+		<if test="fatherPhone!=null and fatherPhone!='' ">#{fatherPhone},</if>
+		<if test="motherName!=null and motherName!='' ">#{motherName},</if>
+		<if test="motherPhone!=null and motherPhone!='' ">#{motherPhone},</if>
+		#{inShop},#{inClass},#{ruxueTime},#{isPay})
+	</insert>
+	<!-- 修改学生信息 -->
+	<update id="updStudent" parameterType="hashmap">
+		update student set stuName=#{stuName},sex=#{sex},age=#{age},fatherName=#{fatherName},fatherPhone=#{fatherPhone},
+		motherName=#{motherName},motherPhone=#{motherName},inShop=#{inShop},inClass=#{inClass},entranceTime=#{ruxueTime},isPay=#{isPay}
+		where Id=#{stuId}
+	</update>
+	<!-- 删除学生信息 -->
+	<update id="delStudentInfo" parameterType="int">
+		update student set isDel=1 where Id=#{stuId}
+	</update>
 	
 </mapper>

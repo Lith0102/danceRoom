@@ -19,7 +19,7 @@
 	<!-- 内容主体区域 -->
 	<div style="padding: 15px;" class="layui-anim layui-anim-upbit">
 		<blockquote class="layui-elem-quote layui-bg-blue">
-			优惠券
+			学生列表
 		</blockquote>
 		<div class="yw_cx">
 			<div class="layui-form-item">
@@ -90,7 +90,7 @@
 		
 	</div>
 	<script type="text/html" id="fatherinfo">
-  		{{# if(d.fatherName!=null && d.fatherPhone!=null){ }}
+  		{{# if(d.fatherName!=null && d.fatherName!='' && d.fatherPhone!=null && d.fatherPhone!=''){ }}
 			{{d.fatherName}}/{{d.fatherPhone}}
 		{{# }else{ }}
 		{{#	if(d.fatherName!=null){ }}
@@ -103,7 +103,7 @@
 		{{# } }}
 	</script>
 	<script type="text/html" id="motherinfo">
-		{{# if(d.motherName!=null && d.motherPhone!=null){ }}
+		{{# if(d.motherName!=null && d.motherName!='' && d.motherPhone!=null && d.motherPhone!=''){ }}
 			{{d.motherName}}/{{d.motherPhone}}
 		{{# }else{ }}
 		{{#	if(d.motherName!=null){ }}
@@ -278,18 +278,16 @@
 			})
 			//添加学生
 			$("#addStudent").click(function(){
-				openwindow("/student/addStudentFace?type=1&stuId=","添加学生",900,1500,false,function(){
-					tableIns.reload({
-						page: {
-							curr: 1
-						}
-					});
-				});
+				updStudent(1," ");
 			})
 			
 			//编辑学生信息
 			function updStudent(type,Id){
-				openwindow("/student/addStudentFace?type="+type+"&stuId="+Id,"编辑学生信息",900,1000,true,function(){
+				var title = "编辑学生信息";
+				if(type==1){
+					title = "添加学生信息";
+				}
+				openwindow("/student/addStudentFace?type="+type+"&stuId="+Id,title,900,1500,false,function(){
 					tableIns.reload({
 						page: {
 							curr: 1
@@ -308,6 +306,7 @@
 						success : function(data) {
 							tableIns.reload({
 								where: { //设定异步数据接口的额外参数，任意设
+									type:${type},
 									num:Math.random()
 								},
 								page: {

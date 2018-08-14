@@ -62,9 +62,10 @@
 	<m:Content contentPlaceHolderId="content">
 		<div style="padding: 0 30px" class="layui-anim layui-anim-upbit">
 
-			<div class="layui-field-box"
-				style="border-color: #666; border-radius: 3px; padding: 10px;">
+			<div class="layui-field-box" style="border-color: #666; border-radius: 3px; padding: 10px;">
 				<form class="layui-form">
+					<input type="hidden" name="stuId" id="stuId" value="${Id}">
+					<input type="hidden" name="type" id="type" value="${type}">
 					<div class="layui-form-item">
 						<label class="layui-form-label"><span class="must">*</span>学生姓名：</label>
 						<div class="layui-input-block">
@@ -145,7 +146,7 @@
 					<div class="layui-inline">
 						<label class="layui-form-label">入学时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" name="ruxueTime" id="ruxueTime" lay-verify="date" autocomplete="off" class="layui-input">
+							<input type="text" readonly="readonly" value="${ruxueTime}" name="ruxueTime" id="ruxueTime" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -169,7 +170,7 @@
 		layui.use(['form','laydate','layedit'], function(){
 			var form = layui.form;
 			var laydate = layui.laydate;
-			
+			var index = parent.layer.getFrameIndex(window.name);
 			//监听提交
 			form.on('submit(addEqBtn)', function(data){
 				if(!check()){
@@ -178,59 +179,79 @@
 				var success = function(data){
 					if(data.result){
 						layer.msg(data.msg, {icon: 1});
+						setTimeout(function(){
+							parent.layer.close(index);
+						},1000);
+						
 					}else{
 						layer.msg(data.msg, {icon: 2});
 					}
 				}
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/student/addStudent', postData, success, 'post', 'json');
 				return false;
 			})
 			
 			laydate.render({
-				elem: '#ruxueTime'
+				elem: '#ruxueTime',
+				type:'date'
 				/* range: true  区间时间选择*/
 			});
 			
 			function check(){
-				var result = true;
-				var planSize = $("#allPlans .planDiv").length;
-				if(planSize==0){
-					layer.msg("请至少添加一项活动计划！",{icon:2});
-					result = false;
-					return result;
-				}else{
-					$("#allPlans .planDiv").each(function(){
-						var num = $(this).attr("num");
-						var title = $(this).find("input[id='plan"+num+"_planName']").val();
-						var planTime = $(this).find("input[id='plan"+num+"_activityTime']").val();
-						var address = $(this).find("input[id='plan"+num+"_address']").val();
-						var students = $(this).find("input[id='plan"+num+"_students']").val();
-						if(title==null || title==''){
-							tipinfo("请输入活动标题！","#plan"+num+"_planName");
-							result = false;
-							return result;
-						}
-						if(planTime==null || planTime==''){
-							tipinfo("请输入活动时间！","#plan"+num+"_activityTime");
-							result = false;
-							return result;
-						}
-						if(address==null || address==''){
-							tipinfo("请输入活动地点！","#plan"+num+"_address");
-							result = false;
-							return result;
-						}
-						if(students==null || students==''){
-							tipinfo("请选择参加的学生！","#id_select"+num);
-							result = false;
-							return result;
-						}
-					})
+					
+				var stuName = $("#stuName").val();
+				var age = $("#age").val();
+				var fatherName = $("#fatherName").val();
+				var fatherPhone = $("#fatherPhone").val();
+				var motherName = $("#motherName").val();
+				var motherPhone = $("#motherPhone").val();
+				var inShop = $("#inShop").next().find(".layui-this").attr("lay-value");
+				var inClass = $("#inClass").next().find(".layui-this").attr("lay-value");
+				var ruxueTime = $("#ruxueTime").val();
+				
+				if(stuName==null || stuName==''){
+					layer.msg("请输入学生姓名！",{icon:2});
+					return false;
 				}
-				return result;
+				var reg=/^\+?[1-9][0-9]*$/;
+				var aa = reg.test(age);
+				if(age==null || age=='' || !reg.test(age)){
+					layer.msg("请输入正确的学生年龄！",{icon:2});
+					return false;
+				}
+				if((fatherName==null || fatherName=='') && (fatherPhone==null || fatherPhone=='') && (motherName==null || motherName=='') && (motherPhone==null || motherPhone=='')){
+					layer.msg("请至少填写一位家长的信息！",{icon:2});
+					return false;
+				}
+				var regPhone = /^((\d{3}-\d{8}|\d{4}-\d{7,8})|(1[3|5|7|8][0-9]{9}))$/
+				if(fatherName!=null && fatherName!=''){
+					if(fatherPhone==null || fatherPhone=='' || !regPhone.test(fatherPhone)){
+						layer.msg("请填写正确的父亲的手机号！",{icon:2});
+						return false;
+					}
+				}
+				if(motherName!=null && motherName!=''){
+					if(motherPhone==null || motherPhone==''){
+						layer.msg("请填写母亲的手机号！",{icon:2});
+						return false;
+					}
+				}
+				if(inShop==null || inShop==' '){
+					layer.msg("请选择所在店铺！",{icon:2});
+					return false;
+				}
+				if(inClass==null || inClass==' '){
+					layer.msg("请选择所在班级！",{icon:2});
+					return false;
+				}
+				if(ruxueTime==null || ruxueTime==''){
+					layer.msg("请选择入学时间！",{icon:2});
+					return false;
+				}
+				
+				return true;
 			}
-			
 			
 		})
 		

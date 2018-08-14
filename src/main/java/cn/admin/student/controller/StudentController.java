@@ -65,9 +65,10 @@ public class StudentController {
 			String[] time = ruxueTime.split("~");
 			startTime = time[0];
 			endTime = time[1].trim();
+			
+			search.put("startTime", startTime);
+			search.put("endTime", endTime);
 		}
-		search.put("startTime", startTime);
-		search.put("endTime", endTime);
 		
 		List<Map> list = studentService.selStudentList(search);//学生列表
 		map.put("msg", "");
@@ -80,13 +81,54 @@ public class StudentController {
 	
 	//添加编辑学生页面
 	@RequestMapping(value="/addStudentFace")
-	public ModelAndView addStudentFace() {
+	public ModelAndView addStudentFace(@RequestParam("type") int type,@RequestParam("stuId") String stuId) {
 		Map<String,Object> map = new HashMap<String,Object>(); 
+		if(!StringUtils.isEmpty(stuId)){
+			map = studentService.selStudentById(stuId);
+		}
 		List shopList = studentService.selShopList();//店铺列表
 		List classList = studentService.selClassList();//班级列表
 		map.put("shopList", shopList);
 		map.put("classList", classList);
+		map.put("type", type);
 		return new ModelAndView("admin/student/addStu",map);
+	}
+	
+	//添加或编辑学生
+	@RequestMapping(value="/addStudent")
+	@ResponseBody
+	public Map<String,Object> addStudent(@RequestParam Map map){
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		int type = Integer.parseInt(map.get("type")+"");
+		int row = 0;
+		if(type==1){//新增
+			row = studentService.addStudent(map);
+		}else {//修改
+			row = studentService.updStudent(map);
+		}
+		if(row>0) {
+			result.put("result",true);
+			result.put("msg", "保存成功！");
+		}
+		return result;
+		
+	}
+	
+	//删除学生信息
+	@RequestMapping(value="/delStudentInfo")
+	@ResponseBody
+	public Map<String,Object> delStudentInfo(@RequestParam("stuId") int stuId){
+		Map<String,Object> result = new HashMap<String,Object>();
+		int row = studentService.delStudentInfo(stuId);
+		if(row>0){
+			result.put("result", true);
+			result.put("msg", "操作成功！");
+		}else {
+			result.put("result",false);
+			result.put("msg", "操作失败！");
+		}
+		return result;
 	}
 	
 	

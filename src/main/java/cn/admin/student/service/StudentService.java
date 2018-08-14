@@ -24,6 +24,10 @@ public class StudentService {
 	public List<Map> selStudentList(Map search) {
 		return sqlSession.selectList("studentDao.selStudentList", search);
 	}
+	//通过id查学生信息
+	public Map<String, Object> selStudentById(String stuId) {
+		return sqlSession.selectOne("studentDao.selStudentById", stuId);
+	}
 	//店铺列表
 	public List selShopList() {
 		return sqlSession.selectList("studentDao.selShopList");
@@ -31,6 +35,19 @@ public class StudentService {
 	//班级列表
 	public List selClassList() {
 		return sqlSession.selectList("studentDao.selClassList");
+	}
+	//新增学生
+	public int addStudent(Map map) {
+		return sqlSession.insert("studentDao.addStudent",map);
+	}
+	//修改学生信息
+	public int updStudent(Map map) {
+		return sqlSession.update("studentDao.updStudent",map);
+	}
+	//删除学生信息
+	public int delStudentInfo(int stuId) {
+		return sqlSession.update("studentDao.delStudentInfo",stuId);
+				
 	}
 	
 	
