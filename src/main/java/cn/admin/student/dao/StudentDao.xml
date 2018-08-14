@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="studentDao">
+	
+	<!-- 查询学生数量 -->
+	<select id="selTotalCount" parameterType="hashmap" resultType="long">
+		select count(0) from student st
+		LEFT JOIN shops sp on st.inShop=sp.Id
+		LEFT JOIN allclass ac on st.inClass=ac.Id
+		where st.isPay=#{type} and st.isDel=0
+		<if test="studentName!=null and studentName!='' ">
+			and st.stuName like "%"#{studentName}"%" 
+		</if>
+		<if test="parentsinfo!=null and parentsinfo!='' ">
+			and (st.fatherName like "%"#{parentsinfo}"%" or st.motherName like "%"#{parentsinfo}"%")
+		</if>
+		<if test="inShop!=null and inShop!='' ">
+			and sp.Id=#{inShop}
+		</if>
+		<if test="inClass!=null and inClass!='' ">
+			and ac.Id=#{inClass}
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and st.entranceTime <![CDATA[>=]]>#{startTime}
+    		and st.entranceTime <![CDATA[<=]]>#{endTime}
+		</if>
+	</select>
+	
+	<!-- 学生列表 -->
+	<select id="selStudentList" parameterType="hashmap" resultType="hashmap">
+		select st.Id,st.stuName,case st.sex when 1 then '男' when 2 then '女' end sexText,st.age,st.fatherName,st.fatherPhone,
+		st.motherName,st.motherPhone,date_format(st.entranceTime , '%Y-%m-%d' '%H:%i:%S') entranceTime,case st.isPay when 0 then '已交费' when 1 then '未交费' end isPayText,
+		sp.shopName,ac.className
+		from student st
+		LEFT JOIN shops sp on st.inShop=sp.Id 
+		LEFT JOIN allclass ac on st.inClass=ac.Id
+		where st.isPay=#{type} and st.isDel=0
+		<if test="studentName!=null and studentName!='' ">
+			and st.stuName like "%"#{studentName}"%" 
+		</if>
+		<if test="parentsinfo!=null and parentsinfo!='' ">
+			and (st.fatherName like "%"#{parentsinfo}"%" or st.motherName like "%"#{parentsinfo}"%")
+		</if>
+		<if test="inShop!=null and inShop!='' ">
+			and sp.Id=#{inShop}
+		</if>
+		<if test="inClass!=null and inClass!='' ">
+			and ac.Id=#{inClass}
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and st.entranceTime <![CDATA[>=]]>#{startTime}
+    		and st.entranceTime <![CDATA[<=]]>#{endTime}
+		</if>
+		limit #{start},#{pageSize} 
+	</select>
+	
+	<!-- 查询店铺列表 -->
+	<select id="selShopList" resultType="hashmap">
+		select * from shops where isDel=0
+	</select>
+	<!-- 查询班级列表 -->
+	<select id="selClassList" resultType="hashmap">
+		select * from allclass where isDel=0
+	</select>
+	
+</mapper>

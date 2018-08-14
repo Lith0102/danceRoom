@@ -127,7 +127,7 @@
 				height="100%";
 			}else{
 				if ($(window).height() <= height) {
-					height = $(window).height() - 150;
+					height = $(window).height() - 50;
 				}
 				if ($(window).width() <= width) {
 					width = $(window).width() - 150;

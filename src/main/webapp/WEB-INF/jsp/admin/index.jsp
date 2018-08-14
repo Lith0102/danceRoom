@@ -22,7 +22,7 @@
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item">
 					<a href="javascript:;"> 
-						<img src="/manage/images/index/u1052.png" class="layui-nav-img">${username }
+						<img src="/manage/images/index/yijiayi.jpg" class="layui-nav-img">${username }
 					</a>
 					<dl class="layui-nav-child">
 						<dd>
