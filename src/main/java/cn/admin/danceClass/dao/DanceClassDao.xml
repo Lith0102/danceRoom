@@ -59,7 +59,7 @@
 	
 	<!-- 查询所有学生信息 -->
 	<select id="selStudentList" resultType="hashmap">
-		select * from student where isDel=0 and isPay=0
+		select Id,stuName from student where isDel=0 and isPay=0
 	</select>
 	 <!-- 查询本年的教学计划和活动 -->
 	 <select id="selPlanInfo" parameterType="String" resultType="hashmap">
