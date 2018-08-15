@@ -3,8 +3,35 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="teachersDao">
-
-
-
+	
+	<!-- 查询教师上数量 -->
+	<select id="selTotalCount" parameterType="hashmap" resultType="long">
+		select count(0) from teachers where isDel=0 and `subject`=#{type}
+		<if test="teaName!=null and teaName!='' ">
+			and teacherName like "%"#{teaName}"%"
+		</if>
+		<if test="teaPhone!=null and teaPhone!='' ">
+			and phoneNum like "%"#{teaPhone}"%"
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and entryTime <![CDATA[>=]]>#{startTime}
+    		and entryTime <![CDATA[<=]]>#{endTime}
+		</if>
+	</select>
+	<!-- 查询教师列表 -->
+	<select id="selTeacherList" parameterType="hashmap" resultType="hashmap">
+		select * from teachers where isDel=0 and subject=#{type}
+		<if test="teaName!=null and teaName!='' ">
+			and teacherName like "%"#{teaName}"%"
+		</if>
+		<if test="teaPhone!=null and teaPhone!='' ">
+			and phoneNum like "%"#{teaPhone}"%"
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and entryTime <![CDATA[>=]]>#{startTime}
+    		and entryTime <![CDATA[<=]]>#{endTime}
+		</if>
+		limit #{start},#{pageSize}
+	</select>
 
 </mapper>
