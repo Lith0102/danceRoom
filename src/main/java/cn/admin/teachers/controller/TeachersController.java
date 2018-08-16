@@ -69,7 +69,6 @@ public class TeachersController {
 		map.put("count", totalCount);
 		
 		return map;
-		
 	}
 	
 	

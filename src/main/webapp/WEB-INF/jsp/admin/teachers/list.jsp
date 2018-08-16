@@ -53,7 +53,7 @@
 				</div>
 				<div class="layui-inline" id="layerDemo" style="margin-left: -7%;">
 					<div class="layui-input-inline">
-						<button class="layui-btn layui-btn-normal" id="addStudent"><i class="layui-icon">&#xe654;</i>添加学生</button>
+						<button class="layui-btn layui-btn-normal" id="addStudent"><i class="layui-icon">&#xe654;</i>添加教师</button>
 					</div>
 				</div>
 			</div>
