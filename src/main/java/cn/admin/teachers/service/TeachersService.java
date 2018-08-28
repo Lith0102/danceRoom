@@ -24,6 +24,19 @@ public class TeachersService {
 	public List<Map> selTeacherList(Map search) {
 		return sqlSession.selectList("teachersDao.selTeacherList", search);
 	}
+	//根据id查询教师信息
+	public Map selTeacherById(String teaId) {
+		return sqlSession.selectOne("teachersDao.selTeacherById", teaId);
+	}
+	//添加教师信息
+	public int addTeacherInfo(Map info) {
+		return sqlSession.insert("teachersDao.addTeacherInfo",info);
+	}
+	//修改教师信息
+	public int updTeacherInfo(Map info) {
+		return sqlSession.update("teachersDao.updTeacherInfo",info);
+	}
+	
 	
 	
 	

@@ -233,7 +233,7 @@
 					}
 				});
 			})
-			//添加学生
+			//添加教师
 			$("#addTeacher").click(function(){
 				updTeacher(1," ");
 			})
@@ -244,7 +244,7 @@
 				if(type==1){
 					title = "添加教师信息";
 				}
-				openwindow("/teachers/addTeacherFace?type="+type+"&stuId="+Id,title,900,1500,false,function(){
+				openwindow("/teachers/addTeacherFace?type="+type+"&teacherId="+Id,title,900,1500,false,function(){
 					tableIns.reload({
 						page: {
 							curr: 1

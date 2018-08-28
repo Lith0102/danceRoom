@@ -19,13 +19,24 @@
 }
 
 .layui-input {
-	width: 325%;
+	width: 330%;
 }
 .only-input{
 	width: 87%;
 }
 .layui-textarea{
 	width: 87%;
+}
+.photoDiv{
+	border: 1px solid #E6E6E6;
+	width: 200px;
+	height: 250px;
+	margin-left: 175px;
+	color: #C1C1C1;
+	text-align: center;
+	line-height: 250px;
+	font-size: 15px;
+	cursor: pointer;
 }
 /* .layui-form-select .layui-edge {
 	right: -215%;
@@ -54,17 +65,29 @@
 	<m:Content contentPlaceHolderId="content">
 		<div style="padding: 0 30px" class="layui-anim layui-anim-upbit">
 
+			<!-- 照片 -->
+			<form action="/${applicationScope.adminprefix }/teachers/photoUpload" enctype="multipart/form-data" id="fileForm" method="post" style="display: none;">
+				<input type="file" id="photoUpload" name="photoUpload" value="" onchange="submitfile();">
+			</form>
+
 			<div class="layui-field-box" style="border-color: #666; border-radius: 3px; padding: 10px;">
 				<form class="layui-form">
+					
+					<input type="hidden" id="type" name="type" value="${type}">
+					<input type="hidden" id="teacherId" name="teacherId" value="${teacherId}">						
+											
 					<div class="layui-form-item">
 						<label class="layui-form-label">教师照片：</label>
-						<div class="layui-input-block"></div>
-						
+						<div class="layui-input-block photoDiv" id="triggerUpload">
+							<c:if test="${empty photoUrl}">点击上传照片</c:if>
+							<c:if test="${!empty photoUrl}"><img src="${photoUrl}" width="200px;" height="250px;"></c:if>
+						</div>
+						<input type="hidden" id="photoUrl" name="photoUrl" value="${photoUrl}">
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label"><span class="must">*</span>教师姓名：</label>
 						<div class="layui-input-block">
-							<input type="text" name="teaName" id="teaName" value="${teaName}" lay-verify="teaName"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="teaName" id="teaName" value="${teacherName}" lay-verify="teaName"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item" style="margin-top: -8px;">
@@ -102,17 +125,17 @@
 					<div class="layui-inline">
 						<label class="layui-form-label">入职时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" readonly="readonly" value="${ruzhiTime}" name="ruzhiTime" id="ruzhiTime" autocomplete="off" class="layui-input">
+							<input type="text" readonly="readonly" value="${entryTime}" name="ruzhiTime" id="ruzhiTime" autocomplete="off" class="layui-input">
 						</div>
 					</div>
-					<div class="layui-form-item">
+					<div class="layui-form-item" style="margin-top: 10px;">
 						<label class="layui-form-label"><span class="must">*</span>学历：</label>
 						<div class="layui-input-block">
 							<input type="text" name="education" id="education" value="${education}" lay-verify="education"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>资历介绍：</label>
+						<label class="layui-form-label">资历介绍：</label>
 						<div class="layui-input-block">
 							<textarea name="seniority" id="seniority" required lay-verify="seniority" placeholder="请输入" class="layui-textarea">${seniority}</textarea>
 						</div>
@@ -125,7 +148,8 @@
 		</div>
 	</m:Content>
 	<m:Content contentPlaceHolderId="js">
-
+	
+		<script type="text/javascript" src="/manage/public/js/jquery.form.min.js"></script>
 		<script type="text/javascript">
 	
 		layui.use(['form','laydate','layedit'], function(){
@@ -149,7 +173,7 @@
 					}
 				}
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/student/addStudent', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/teachers/addTeachersInfo', postData, success, 'post', 'json');
 				return false;
 			})
 			
@@ -161,58 +185,43 @@
 			
 			function check(){
 					
-				var stuName = $("#stuName").val();
+				var teaName = $("#teaName").val();
 				var age = $("#age").val();
-				var fatherName = $("#fatherName").val();
-				var fatherPhone = $("#fatherPhone").val();
-				var motherName = $("#motherName").val();
-				var motherPhone = $("#motherPhone").val();
-				var inShop = $("#inShop").next().find(".layui-this").attr("lay-value");
-				var inClass = $("#inClass").next().find(".layui-this").attr("lay-value");
-				var ruxueTime = $("#ruxueTime").val();
+				var address = $("#address").val();
+				var phoneNum = $("#phoneNum").val();
+				var education = $("#education").val();
 				
-				if(stuName==null || stuName==''){
-					layer.msg("请输入学生姓名！",{icon:2});
+				if(teaName==null || teaName==''){
+					layer.msg("请输入教师姓名！",{icon:2});
 					return false;
 				}
 				var reg=/^\+?[1-9][0-9]*$/;
 				var aa = reg.test(age);
 				if(age==null || age=='' || !reg.test(age)){
-					layer.msg("请输入正确的学生年龄！",{icon:2});
+					layer.msg("请输入正确的年龄！",{icon:2});
 					return false;
 				}
-				if((fatherName==null || fatherName=='') && (fatherPhone==null || fatherPhone=='') && (motherName==null || motherName=='') && (motherPhone==null || motherPhone=='')){
-					layer.msg("请至少填写一位家长的信息！",{icon:2});
+				if(address==null || address==''){
+					layer.msg("请输入教师住址！",{icon:2});
 					return false;
 				}
 				var regPhone = /^((\d{3}-\d{8}|\d{4}-\d{7,8})|(1[3|5|7|8][0-9]{9}))$/
-				if(fatherName!=null && fatherName!=''){
-					if(fatherPhone==null || fatherPhone=='' || !regPhone.test(fatherPhone)){
-						layer.msg("请填写正确的父亲的手机号！",{icon:2});
-						return false;
-					}
-				}
-				if(motherName!=null && motherName!=''){
-					if(motherPhone==null || motherPhone==''){
-						layer.msg("请填写母亲的手机号！",{icon:2});
-						return false;
-					}
-				}
-				if(inShop==null || inShop==' '){
-					layer.msg("请选择所在店铺！",{icon:2});
+				if(phoneNum==null || phoneNum=='' || !regPhone.test(phoneNum)){
+					layer.msg("请填写正确的手机号！",{icon:2});
 					return false;
 				}
-				if(inClass==null || inClass==' '){
-					layer.msg("请选择所在班级！",{icon:2});
-					return false;
-				}
-				if(ruxueTime==null || ruxueTime==''){
-					layer.msg("请选择入学时间！",{icon:2});
+				if(education==null || education==''){
+					layer.msg("请输入教师学历！",{icon:2});
 					return false;
 				}
 				
 				return true;
 			}
+			
+			
+			$("#triggerUpload").click(function(){
+				$("#photoUpload").click();
+			})
 			
 		})
 		
@@ -227,6 +236,17 @@
 			})
 		}
     	
+		function submitfile(){
+			$("#fileForm").ajaxSubmit({
+				type:"post",
+		    	dataType:"json",
+		  		success: function (data) {
+		  			var imghtml = '<img alt="" src="'+data.photoUrl+'" width="200px;" heigth="250px;" >';
+		  			$("#triggerUpload").html(imghtml);
+		  			$("#photoUrl").val(data.photoUrl);
+		   	    }
+		   	}) 
+		}
 		
 	</script>
 	</m:Content>

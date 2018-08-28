@@ -35,5 +35,40 @@
 		</if>
 		limit #{start},#{pageSize}
 	</select>
-
+	<!-- 根据id查询教师信息 -->
+	<select id="selTeacherById" parameterType="String" resultType="hashmap">
+		select * from teachers where Id=#{teaId}
+	</select>
+	
+	<!-- 添加教师信息 -->
+	<insert id="addTeacherInfo" parameterType="hashmap">
+		insert into teachers (teacherName,sex,age,address,phoneNum,education,subject,photoUrl
+		<if test="ruzhiTime!=null and ruzhiTime!='' ">
+			,entryTime
+		</if>
+		<if test="seniority!=null and seniority!='' ">
+			,seniority
+		</if>
+		) values
+		(#{teaName},#{sex},#{age},#{address},#{phoneNum},#{education},#{subject},#{photoUrl}
+		<if test="ruzhiTime!=null and ruzhiTime!='' ">
+			,#{ruzhiTime}
+		</if>
+		<if test="seniority!=null and seniority!='' ">
+			,#{seniority}
+		</if>
+		)
+	</insert>
+	<!-- 修改教师信息 -->
+	<update id="updTeacherInfo" parameterType="hashmap">
+		update teachers set teacherName=#{teaName},sex=#{sex},age=#{age},address=#{address},
+		phoneNum=#{phoneNum},education=#{education},subject=#{subject},photoUrl=#{photoUrl}
+		<if test="ruzhiTime!=null and ruzhiTime!='' ">
+			,entryTime=#{ruzhiTime}
+		</if>
+		<if test="seniority!=null and seniority!='' ">
+			,seniority=#{seniority}
+		</if>
+		where Id=#{teacherId}
+	</update>
 </mapper>
