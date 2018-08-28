@@ -20,7 +20,9 @@
 	</select>
 	<!-- 查询教师列表 -->
 	<select id="selTeacherList" parameterType="hashmap" resultType="hashmap">
-		select * from teachers where isDel=0 and subject=#{type}
+		select Id,teacherName,case sex when 1 then '男' when 2 then '女' end sexText,age,address,
+		phoneNum,education,date_format(entryTime , '%Y-%m-%d') entryTime
+		from teachers where isDel=0 and subject=#{type}
 		<if test="teaName!=null and teaName!='' ">
 			and teacherName like "%"#{teaName}"%"
 		</if>

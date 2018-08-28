@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="/WEB-INF/tlds/authorizetag.tld" prefix="px"%>
@@ -19,17 +18,16 @@
 	font-size: 15px;
 }
 
-.nowPage {
-	margin-top: 10px;
-}
-
 .layui-input {
 	width: 325%;
 }
 .only-input{
 	width: 87%;
 }
-.layui-form-select .layui-edge {
+.layui-textarea{
+	width: 87%;
+}
+/* .layui-form-select .layui-edge {
 	right: -215%;
 }
 
@@ -47,7 +45,8 @@
 
 .dropdown-menu>li>a {
 	width: 595%;
-}
+} */
+
 
 
 </style>
@@ -57,12 +56,15 @@
 
 			<div class="layui-field-box" style="border-color: #666; border-radius: 3px; padding: 10px;">
 				<form class="layui-form">
-					<input type="hidden" name="stuId" id="stuId" value="${Id}">
-					<input type="hidden" name="type" id="type" value="${type}">
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>学生姓名：</label>
+						<label class="layui-form-label">教师照片：</label>
+						<div class="layui-input-block"></div>
+						
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="must">*</span>教师姓名：</label>
 						<div class="layui-input-block">
-							<input type="text" name="stuName" id="stuName" value="${stuName}" lay-verify="stuName"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="teaName" id="teaName" value="${teaName}" lay-verify="teaName"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item" style="margin-top: -8px;">
@@ -73,81 +75,47 @@
 					    </div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>学生年龄：</label>
+						<label class="layui-form-label"><span class="must">*</span>年龄：</label>
 						<div class="layui-input-block">
 							<input type="text" name="age" id="age" value="${age}" lay-verify="age"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
-					<div class="planDiv">
-						<div class="layui-inline">
-							<label class="layui-form-label"><span class="must">*</span>父亲信息：</label>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 60px; padding-left: 0px;">姓名：</label>
-						</div>
-						<div class="layui-input-inline">
-							<input type="text" placeholder="父亲姓名" lay-verify="fatherName" value="${fatherName}" name="fatherName" id="fatherName" autocomplete="off" class="layui-input" style="width: 120%;">
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="margin-left: -10%;">电话：</label>
-						</div>
-						<div class="layui-inline">
-							<input type="text" placeholder="父亲手机号" lay-verify="fatherPhone" value="${fatherPhone}" name="fatherPhone" id="fatherPhone" autocomplete="off" class="layui-input" style="width: 122%; margin-left: -10%;">
-						</div>
-					</div>
-					<div class="planDiv">
-						<div class="layui-inline">
-							<label class="layui-form-label"><span class="must">*</span>母亲信息：</label>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 60px; padding-left: 0px;">姓名：</label>
-						</div>
-						<div class="layui-input-inline">
-							<input type="text" placeholder="母亲姓名" lay-verify="motherName" value="${motherName}" name="motherName" id="motherName" autocomplete="off" class="layui-input" style="width: 120%;">
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="margin-left: -10%;">电话：</label>
-						</div>
-						<div class="layui-inline">
-							<input type="text" placeholder="母亲手机号" lay-verify="motherPhone" value="${motherPhone}" name="motherPhone" id="motherPhone" autocomplete="off" class="layui-input" style="width: 122%; margin-left: -10%;">
-						</div>
-					</div>
-					<div class="layui-form-item" style="margin-top: 10px;">
-						<label class="layui-form-label"><span class="must">*</span>所属店铺：</label>
-						<div class="layui-input-inline">
-							<select class="layui-inputs" name="inShop" id="inShop" lay-filter="inShop">
-								<option value=" ">请选择</option>
-								<c:forEach items="${shopList}" var="shopList">
-									<option value="${shopList.Id}"
-										<c:if test="${shopList.Id==inShop}">selected</c:if>>${shopList.shopName}</option>
-								</c:forEach>
-							</select>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="must">*</span>家庭住址：</label>
+						<div class="layui-input-block">
+							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>所属班级：</label>
-						<div class="layui-input-inline">
-							<select class="layui-inputs" name="inClass" id="inClass" lay-filter="inClass">
-								<option value=" ">请选择</option>
-								<c:forEach items="${classList}" var="classList">
-									<option value="${classList.Id}"
-										<c:if test="${classList.Id==inClass}">selected</c:if>>${classList.className}</option>
-								</c:forEach>
-							</select>
+						<label class="layui-form-label"><span class="must">*</span>手机号：</label>
+						<div class="layui-input-block">
+							<input type="text" name="phoneNum" id="phoneNum" value="${phoneNum}" lay-verify="phoneNum"  autocomplete="off" class="layui-input only-input" />
 						</div>
+					</div>
+					<div class="layui-form-item" style="margin-top: -8px;">
+					    <label class="layui-form-label"><span class="must">*</span>所教科目：</label>
+					    <div class="layui-input-block">
+					      <input type="radio"  name="subject" value="1" title="舞蹈" <c:if test="${subject==1 || subject==null}">checked</c:if> >
+					      <input type="radio"  name="subject" value="2" title="美术" <c:if test="${subject==2}">checked</c:if> >
+					    </div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">入学时间：</label>
+						<label class="layui-form-label">入职时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" readonly="readonly" value="${ruxueTime}" name="ruxueTime" id="ruxueTime" autocomplete="off" class="layui-input">
+							<input type="text" readonly="readonly" value="${ruzhiTime}" name="ruzhiTime" id="ruzhiTime" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-form-item">
-					    <label class="layui-form-label"><span class="must">*</span>是否缴费：</label>
-					    <div class="layui-input-block">
-					      <input type="radio"  name="isPay" value="0" title="已交" <c:if test="${isPay==0 || isPay==null}">checked</c:if> >
-					      <input type="radio"  name="isPay" value="1" title="未交" <c:if test="${isPay==1}">checked</c:if> >
-					    </div>
+						<label class="layui-form-label"><span class="must">*</span>学历：</label>
+						<div class="layui-input-block">
+							<input type="text" name="education" id="education" value="${education}" lay-verify="education"  autocomplete="off" class="layui-input only-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="must">*</span>资历介绍：</label>
+						<div class="layui-input-block">
+							<textarea name="seniority" id="seniority" required lay-verify="seniority" placeholder="请输入" class="layui-textarea">${seniority}</textarea>
+						</div>
 					</div>
 					<div class="layui-form-item" style="text-align: center;">
 						<button class="layui-btn" style="width: 50%; margin-top: 12px;" id="saveInfo" lay-submit="" lay-filter="addEqBtn">保存</button>
@@ -186,7 +154,7 @@
 			})
 			
 			laydate.render({
-				elem: '#ruxueTime',
+				elem: '#ruzhiTime',
 				type:'date'
 				/* range: true  区间时间选择*/
 			});

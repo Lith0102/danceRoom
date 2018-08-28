@@ -71,5 +71,12 @@ public class TeachersController {
 		return map;
 	}
 	
+	//添加或编辑教师信息页面
+	@RequestMapping(value="/addTeacherFace")
+	public ModelAndView addTeacherFace(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		return new ModelAndView("admin/teachers/add");
+	}
+	
 	
 }

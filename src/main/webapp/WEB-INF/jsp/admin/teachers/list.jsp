@@ -53,7 +53,7 @@
 				</div>
 				<div class="layui-inline" id="layerDemo" style="margin-left: -7%;">
 					<div class="layui-input-inline">
-						<button class="layui-btn layui-btn-normal" id="addStudent"><i class="layui-icon">&#xe654;</i>添加教师</button>
+						<button class="layui-btn layui-btn-normal" id="addTeacher"><i class="layui-icon">&#xe654;</i>添加教师</button>
 					</div>
 				</div>
 			</div>
@@ -133,49 +133,39 @@
 					[	
 						//表头
 						{
-							width:'8%',
-							field: 'stuName',
-							title: '学生姓名',
+							width:'13%',
+							field: 'teacherName',
+							title: '教师姓名',
 						},
 						{
-							width:'5%',
+							width:'10%',
 							field: 'sexText',
 							title: '性别',
 						},
 						{
-							width:'5%',
+							width:'10%',
 							field:"age",	
 							title: '年龄',
 						},
 						{
-							width:'15%',	
-							toolbar: '#fatherinfo',
-							title: '父亲姓名及电话',
+							width:'17%',	
+							field: 'address',
+							title: '家庭住址',
 						}, 
 						{
-							width:'15%',	
-							toolbar: '#motherinfo',
-							title: '母亲姓名及电话',
+							width:'13%',	
+							field: 'phoneNum',
+							title: '手机号',
 						},
 						{
-							width:'9%',
-							field: 'shopName',
-							title: '所属门店',
+							width:'13%',
+							field: 'education',
+							title: '学历',
 						},
 						{
-							width:'9%',	
-							field: 'className',
-							title: '所属班级',
-						},
-						{
-							width:'15%',
-							field: 'entranceTime',
-							title: '入学时间',
-						},
-						{
-							width:'8%',
-							field: 'isPayText',
-							title: '是否缴费',
+							width:'13%',	
+							field: 'entryTime',
+							title: '入职时间',
 						},
 						{
 							fixed: 'right',
@@ -193,7 +183,6 @@
 			});
 			
 			
-			
 			//监听锁定操作
 			form.on('checkbox(approveFilter)', function(obj){
 				var id = obj.value;
@@ -209,21 +198,18 @@
 				var tr = obj.tr; //获得当前行 tr 的DOM对象
 				
 				if(layEvent === 'update'){ //编辑
-			  		updStudent(2,data.Id);
+					updTeacher(2,data.Id);
 			  	}else if(layEvent === 'delete'){ //删除
-			  		delStudent(data.Id);
+			  		delTeacher(data.Id);
 			  	}
 			})
-			
 			
 			$('#search').click(function() { //搜索，重置表格
 				tableIns.reload({
 					where: { //设定异步数据接口的额外参数，任意设
-						studentName:$('#studentName').val(),
-						parentsinfo:$('#parent').val(),
-						inShop:$("#inShop").val(),
-						inClass:$("#inClass").val(),
-						ruxueTime:$("#ruxueTime").val(),
+						teaName:$('#teaName').val(),
+						teaPhone:$('#teaPhone').val(),
+						ruzhiTime:$("#ruzhiTime").val(),
 						type:${type},
 					},
 					page: {
@@ -232,18 +218,14 @@
 				});
 			})
 			$('#reset').click(function(){//重置
-				$('#studentName').val("");
-				$('#parent').val("");
-				$("#inShop").val("");
-				$("#inClass").val("");
-				$("#ruxueTime").val("")
+				$('#teaName').val("");
+				$('#teaPhone').val("");
+				$("#ruzhiTime").val("");
 				tableIns.reload({
 					where: { //设定异步数据接口的额外参数，任意设
-						studentName:"",
-						parentsinfo:"",
-						inShop:"",
-						inClass:"",
-						ruxueTime:"",
+						teaName:"",
+						teaPhone:"",
+						ruzhiTime:"",
 						type:${type},
 					},
 					page: {
@@ -252,17 +234,17 @@
 				});
 			})
 			//添加学生
-			$("#addStudent").click(function(){
-				updStudent(1," ");
+			$("#addTeacher").click(function(){
+				updTeacher(1," ");
 			})
 			
 			//编辑学生信息
-			function updStudent(type,Id){
-				var title = "编辑学生信息";
+			function updTeacher(type,Id){
+				var title = "编辑教师信息";
 				if(type==1){
-					title = "添加学生信息";
+					title = "添加教师信息";
 				}
-				openwindow("/student/addStudentFace?type="+type+"&stuId="+Id,title,900,1500,false,function(){
+				openwindow("/teachers/addTeacherFace?type="+type+"&stuId="+Id,title,900,1500,false,function(){
 					tableIns.reload({
 						page: {
 							curr: 1
@@ -273,10 +255,10 @@
 			
 			//删除操作
 			function delStudent(stuId){
-				layer.confirm('确定删除该学生吗？', {icon: 7}, function(){
+				layer.confirm('确定删除该教师吗？', {icon: 7}, function(){
 					$.ajax({
 						type : "POST",
-						url : "/${applicationScope.adminprefix }/student/delStudentInfo",
+						url : "/${applicationScope.adminprefix }/teachers/delTeacherInfo",
 						data : {"stuId" : stuId},
 						success : function(data) {
 							tableIns.reload({
