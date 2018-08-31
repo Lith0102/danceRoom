@@ -44,7 +44,7 @@ public class StudentController {
 		List classList = studentService.selClassList();//班级列表
 		map.put("shopList", shopList);
 		map.put("classList", classList);
-		map.put("type", type);
+		map.put("isPayType", type);
 		return new ModelAndView("/admin/student/list",map);
 	}
 	
@@ -81,7 +81,7 @@ public class StudentController {
 	
 	//添加编辑学生页面
 	@RequestMapping(value="/addStudentFace")
-	public ModelAndView addStudentFace(@RequestParam("type") int type,@RequestParam("stuId") String stuId) {
+	public ModelAndView addStudentFace(@RequestParam("type") int type,@RequestParam("stuId") String stuId,@RequestParam("isPayType") int isPayType) {
 		Map<String,Object> map = new HashMap<String,Object>(); 
 		if(!StringUtils.isEmpty(stuId)){
 			map = studentService.selStudentById(stuId);
@@ -91,6 +91,7 @@ public class StudentController {
 		map.put("shopList", shopList);
 		map.put("classList", classList);
 		map.put("type", type);
+		map.put("isPayType", isPayType);
 		return new ModelAndView("admin/student/addStu",map);
 	}
 	
@@ -110,6 +111,9 @@ public class StudentController {
 		if(row>0) {
 			result.put("result",true);
 			result.put("msg", "保存成功！");
+		}else {
+			result.put("result",false);
+			result.put("msg", "保存失败！");
 		}
 		return result;
 		

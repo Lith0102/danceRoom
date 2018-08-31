@@ -9,7 +9,7 @@
 
 <style>
 .layui-form-label {
-	width: 145px;
+	width: 114px;
 }
 
 .must {
@@ -27,7 +27,7 @@
 	width: 325%;
 }
 .only-input{
-	width: 87%;
+	width: 77%;
 }
 .layui-form-select .layui-edge {
 	right: -215%;
@@ -95,7 +95,7 @@
 							<input type="text" placeholder="父亲手机号" lay-verify="fatherPhone" value="${fatherPhone}" name="fatherPhone" id="fatherPhone" autocomplete="off" class="layui-input" style="width: 122%; margin-left: -10%;">
 						</div>
 					</div>
-					<div class="planDiv">
+					<div class="planDiv" style="margin-top: 10px;">
 						<div class="layui-inline">
 							<label class="layui-form-label"><span class="must">*</span>母亲信息：</label>
 						</div>
@@ -139,14 +139,22 @@
 					<div class="layui-inline">
 						<label class="layui-form-label">入学时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" readonly="readonly" value="${ruxueTime}" name="ruxueTime" id="ruxueTime" autocomplete="off" class="layui-input">
+							<input type="text" readonly="readonly" value="${ruxueTime}" name="ruxueTime" id="ruxueTime" autocomplete="off" class="layui-input" style="width: 340%">
 						</div>
 					</div>
 					<div class="layui-form-item">
 					    <label class="layui-form-label"><span class="must">*</span>是否缴费：</label>
 					    <div class="layui-input-block">
-					      <input type="radio"  name="isPay" value="0" title="已交" <c:if test="${isPay==0 || isPay==null}">checked</c:if> >
-					      <input type="radio"  name="isPay" value="1" title="未交" <c:if test="${isPay==1}">checked</c:if> >
+					      <input type="radio" lay-filter="isPay"  name="isPay" value="0" title="已交" <c:if test="${isPay==0 || isPayType==0}">checked</c:if> >
+					      <input type="radio" lay-filter="isPay"  name="isPay" value="1" title="未交" <c:if test="${isPay==1 || isPayType==1}">checked</c:if> >
+					    </div>
+					</div>
+					<div class="layui-form-item" style="margin-top: -5px;" id="payType">
+					    <label class="layui-form-label"><span class="must">*</span>缴费类型：</label>
+					    <div class="layui-input-block">
+					      <input type="radio"  name="payType" value="1" title="季度" <c:if test="${payType==1 || isPayType==0}">checked</c:if> >
+					      <input type="radio"  name="payType" value="2" title="半年" <c:if test="${payType==2}">checked</c:if> >
+					      <input type="radio"  name="payType" value="3" title="全年" <c:if test="${payType==3}">checked</c:if> >
 					    </div>
 					</div>
 					<div class="layui-form-item" style="text-align: center;">
@@ -246,6 +254,27 @@
 				return true;
 			}
 			
+			//给是否缴费添加事件
+			form.on('radio(isPay)', function(data){
+				  var value = Number(data.value);
+				  if(value==1){
+					  $("#payType").css("display","none");
+					  $("input:radio[name='payType']").attr("disabled",true);
+				  }else{
+					  $("#payType").css("display","inline");
+					  $("input:radio[name='payType']").attr("disabled",false);
+				  }
+			}); 
+			
+			$(function(){
+				var isPayType = ${isPayType};
+				if(isPayType==1){
+					$("#payType").css("display","none");
+					$("input:radio[name='payType']").attr("disabled",true);
+				}
+				
+			})
+			
 		})
 		
 		//删除活动计划
@@ -258,7 +287,6 @@
 				$("#allNum").val($("#allNum").val().replace(planNum+",",""));
 			})
 		}
-    	
 		
 	</script>
 	</m:Content>

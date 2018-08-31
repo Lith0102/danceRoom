@@ -121,6 +121,13 @@
 		<a class="layui-btn layui-btn-xs" lay-event="update">编辑</a>
 		<a class="layui-btn layui-btn-xs" style="background-color: red;" lay-event="delete">删除</a>
 	</script>
+	<script type="text/html" id="isPay">
+		{{# if(d.isPay==0){ }}
+			{{d.isPayText}}/{{d.payType}}
+		{{# }else{ }}
+			{{d.isPayText}}
+		{{# } }}
+	</script>
 	
 </m:Content>
 <m:Content contentPlaceHolderId="js">
@@ -152,7 +159,7 @@
 				page: true, //开启分页
 				limits: [10, 20, 30, 40, 50],
 				where:{
-		            'type':${type},
+		            'type':${isPayType},
 		        },
 				cols: [
 					[	
@@ -193,13 +200,13 @@
 							title: '所属班级',
 						},
 						{
-							width:'15%',
+							width:'10%',
 							field: 'entranceTime',
 							title: '入学时间',
 						},
 						{
-							width:'8%',
-							field: 'isPayText',
+							width:'14%',
+							toolbar: '#isPay',
 							title: '是否缴费',
 						},
 						{
@@ -249,7 +256,7 @@
 						inShop:$("#inShop").val(),
 						inClass:$("#inClass").val(),
 						ruxueTime:$("#ruxueTime").val(),
-						type:${type},
+						type:${isPayType},
 					},
 					page: {
 						curr: 1 //重新从第 1 页开始
@@ -269,7 +276,7 @@
 						inShop:"",
 						inClass:"",
 						ruxueTime:"",
-						type:${type},
+						type:${isPayType},
 					},
 					page: {
 						curr: 1 //重新从第 1 页开始
@@ -287,7 +294,7 @@
 				if(type==1){
 					title = "添加学生信息";
 				}
-				openwindow("/student/addStudentFace?type="+type+"&stuId="+Id,title,900,1500,false,function(){
+				openwindow("/student/addStudentFace?type="+type+"&isPayType="+${isPayType}+"&stuId="+Id,title,1000,1500,false,function(){
 					tableIns.reload({
 						page: {
 							curr: 1
@@ -306,7 +313,7 @@
 						success : function(data) {
 							tableIns.reload({
 								where: { //设定异步数据接口的额外参数，任意设
-									type:${type},
+									type:${isPayType},
 									num:Math.random()
 								},
 								page: {

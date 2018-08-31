@@ -32,7 +32,7 @@
 	<select id="selStudentList" parameterType="hashmap" resultType="hashmap">
 		select st.Id,st.stuName,case st.sex when 1 then '男' when 2 then '女' end sexText,st.age,st.fatherName,st.fatherPhone,
 		st.motherName,st.motherPhone,date_format(st.entranceTime , '%Y-%m-%d') entranceTime,case st.isPay when 0 then '已交费' when 1 then '未交费' end isPayText,
-		sp.shopName,ac.className
+		sp.shopName,ac.className,case st.isPayType when 1 then '季度' when 2 then '半年' when 3 then '全年' end payType,st.isPay
 		from student st
 		LEFT JOIN shops sp on st.inShop=sp.Id 
 		LEFT JOIN allclass ac on st.inClass=ac.Id
@@ -57,7 +57,7 @@
 	</select>
 	<!-- 查询学生信息 -->
 	<select id="selStudentById" parameterType="String" resultType="hashmap">
-		select *,date_format(entranceTime , '%Y-%m-%d') ruxueTime from student where Id=#{stuId}		
+		select *,date_format(entranceTime , '%Y-%m-%d') ruxueTime,isPayType payType from student where Id=#{stuId}		
 	</select>
 	<!-- 查询店铺列表 -->
 	<select id="selShopList" resultType="hashmap">
@@ -74,17 +74,21 @@
 		<if test="fatherPhone!=null and fatherPhone!='' ">fatherPhone,</if>
 		<if test="motherName!=null and motherName!='' ">motherName,</if>
 		<if test="motherPhone!=null and motherPhone!='' ">motherPhone,</if>
-		inShop,inClass,entranceTime,isPay) values
+		inShop,inClass,entranceTime,isPay
+		<if test="payType!=null and payType!='' ">,isPayType</if>
+		) values
 		(#{stuName},#{sex},#{age},<if test="fatherName!=null and fatherName!='' ">#{fatherName},</if>
 		<if test="fatherPhone!=null and fatherPhone!='' ">#{fatherPhone},</if>
 		<if test="motherName!=null and motherName!='' ">#{motherName},</if>
 		<if test="motherPhone!=null and motherPhone!='' ">#{motherPhone},</if>
-		#{inShop},#{inClass},#{ruxueTime},#{isPay})
+		#{inShop},#{inClass},#{ruxueTime},#{isPay}
+		<if test="payType!=null and payType!='' ">,#{payType}</if>)
 	</insert>
 	<!-- 修改学生信息 -->
 	<update id="updStudent" parameterType="hashmap">
 		update student set stuName=#{stuName},sex=#{sex},age=#{age},fatherName=#{fatherName},fatherPhone=#{fatherPhone},
 		motherName=#{motherName},motherPhone=#{motherName},inShop=#{inShop},inClass=#{inClass},entranceTime=#{ruxueTime},isPay=#{isPay}
+		<if test="payType!=null and payType!='' ">,isPayType=#{payType}</if>
 		where Id=#{stuId}
 	</update>
 	<!-- 删除学生信息 -->
