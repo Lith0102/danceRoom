@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="expenditureDao">
+	
+	<!-- 查询支出记录总数 -->
+	<select id="selTotalCount" parameterType="hashmap" resultType="long">
+		select count(0) from expenditure where isDel=0
+		<if test="expenseExplain != null and expenseExplain != '' ">
+			and expenseExplain like "%"#{expenseExplain}"%" 
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and expenseTime <![CDATA[>=]]>#{startTime}
+    		and expenseTime <![CDATA[<=]]>#{endTime}
+		</if>
+	</select>
+	
+	<!-- 查询支出记录数据 -->
+	<select id="selZhiChuList" parameterType="hashmap" resultType="hashmap">
+		select * from expenditure where isDel=0
+		<if test="expenseExplain != null and expenseExplain != '' ">
+			and expenseExplain like "%"#{expenseExplain}"%" 
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and expenseTime <![CDATA[>=]]>#{startTime}
+    		and expenseTime <![CDATA[<=]]>#{endTime}
+		</if>
+		order by expenseTime desc
+		limit #{start},#{pageSize}
+	</select>
+	
+	<!-- 添加支出记录 -->
+	<insert id="addExpenseInfo" parameterType="hashmap">
+		insert into expenditure (expenseExplain,<if test="buyCount!=bull and buyCount!='' ">buyCount,</if>expenseMoney,expenseTime
+		<if test="purpose!=null and purpose!=''">,purpose</if>) values
+		(#{expenseExplain},<if test="buyCount!=bull and buyCount!='' ">#{buyCount},</if>#{expenseMoney},#{expenseTime}
+		<if test="purpose!=null and purpose!=''">,#{purpose}</if>)
+	</insert>
+	<!-- 修改支出记录 -->
+	<update id="updExpenseInfo" parameterType="hashmap">
+		update expenditure set expenseExplain=#{expenseExplain},<if test="buyCount!=bull and buyCount!='' ">buyCount=#{buyCount},</if>
+		expenseMoney=#{expenseMoney},expenseTime=#{expenseTime}
+		<if test="purpose!=null and purpose!=''">,purpose=#{purpose}</if>
+		where Id=#{infoId}
+	</update>
+	
+	<!-- 根据id查信息 -->
+	<select id="selZhiChuInfoById" parameterType="String" resultType="hashmap">
+		select * from expenditure where Id=#{infoId}
+	</select>
+	
+	<!-- 删除记录 -->
+	<update id="delZhiChuInfo" parameterType="int">
+		update expenditure set isDel=1 where Id=#{infoId}
+	</update>
+	
+</mapper>

@@ -277,16 +277,6 @@
 			
 		})
 		
-		//删除活动计划
-		function delplan(planNum){
-			var text = "确定删除'活动计划"+planNum+"'?";
-			layer.confirm(text, {icon: 7}, function(){
-				
-				$("#plan"+planNum).remove();
-				layer.closeAll('dialog');
-				$("#allNum").val($("#allNum").val().replace(planNum+",",""));
-			})
-		}
 		
 	</script>
 	</m:Content>
