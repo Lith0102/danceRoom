@@ -22,7 +22,7 @@ import cn.util.Page;
  *
  * @data 2018年8月31日 上午9:57:18
  * 
- * @Title: 购买支出记录
+ * @Title: 购买支出记录列表
  *
  */
 @Controller
@@ -121,5 +121,7 @@ public class ExpenditureController {
 		}
 		return map;
 	}
+	
+	
 	
 }
