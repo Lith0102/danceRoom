@@ -74,62 +74,52 @@
 					<div class="layui-form-item" style="margin-top: -8px;">
 					    <label class="layui-form-label"><span class="must">*</span>统计分类：</label>
 					    <div class="layui-input-block">
-					      <input type="radio"  name="sex" value="1" title="月统计" >
-					      <input type="radio"  name="sex" value="2" title="季度统计" >
-					      <input type="radio"  name="sex" value="3" title="年统计" >
+					      <input type="radio"  name="calculationType" value="1" title="季度统计">
+					      <input type="radio"  name="calculationType" value="2" title="上半年统计" >
+					      <input type="radio"  name="calculationType" value="3" title="下半年统计" >
+					      <input type="radio"  name="calculationType" value="4" title="年统计" >
 					    </div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>教师姓名：</label>
+						<label class="layui-form-label"><span class="must">*</span>学生缴费收入：</label>
 						<div class="layui-input-block">
-							<input type="text" name="teaName" id="teaName" value="${teacherName}" lay-verify="teaName"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="studentPay" id="studentPay" value="${studentPay}" lay-verify="studentPay"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>年龄：</label>
+						<label class="layui-form-label"><span class="must">*</span>活动收入：</label>
 						<div class="layui-input-block">
-							<input type="text" name="age" id="age" value="${age}" lay-verify="age"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="activityIncome" id="activityIncome" value="${activityIncome}" lay-verify="activityIncome"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>家庭住址：</label>
+						<label class="layui-form-label"><span class="must">*</span>购买支出：</label>
 						<div class="layui-input-block">
 							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label"><span class="must">*</span>手机号：</label>
-						<div class="layui-input-block">
-							<input type="text" name="phoneNum" id="phoneNum" value="${phoneNum}" lay-verify="phoneNum"  autocomplete="off" class="layui-input only-input" />
-						</div>
-					</div>
-					<div class="layui-form-item" style="margin-top: -8px;">
-					    <label class="layui-form-label"><span class="must">*</span>所教科目：</label>
-					    <div class="layui-input-block">
-					      <input type="radio"  name="subject" value="1" title="舞蹈" <c:if test="${subject==1 || subject==null}">checked</c:if> >
-					      <input type="radio"  name="subject" value="2" title="美术" <c:if test="${subject==2}">checked</c:if> >
-					    </div>
-					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">入职时间：</label>
+						<label class="layui-form-label">统计时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" readonly="readonly" value="${entryTime}" name="ruzhiTime" id="ruzhiTime" autocomplete="off" class="layui-input">
+							<input type="text" readonly="readonly" value="${statisticsTime}" name="statisticsTime" id="statisticsTime" autocomplete="off" class="layui-input" style="width: 502%">
 						</div>
 					</div>
 					<div class="layui-form-item" style="margin-top: 10px;">
-						<label class="layui-form-label"><span class="must">*</span>学历：</label>
+						<label class="layui-form-label">其他支出：</label>
 						<div class="layui-input-block">
-							<input type="text" name="education" id="education" value="${education}" lay-verify="education"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
-					<div class="layui-form-item">
-						<label class="layui-form-label">资历介绍：</label>
+					<div class="layui-form-item" style="margin-top: 10px;">
+						<label class="layui-form-label"><span class="must">总共盈利：</span></label>
 						<div class="layui-input-block">
-							<textarea name="seniority" id="seniority" required lay-verify="seniority" placeholder="请输入" class="layui-textarea">${seniority}</textarea>
+							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item" style="text-align: center;">
-						<button class="layui-btn" style="width: 50%; margin-top: 12px;" id="saveInfo" lay-submit="" lay-filter="addEqBtn">保存</button>
+						<a class="layui-btn layui-btn-normal" style="width: 15%; margin-top: 12px;" id="calculation" lay-filter="calculation">计算</a>
+						<a class="layui-btn layui-btn-warm" style="width: 15%; margin-top: 12px;" id="details" lay-submit="" lay-filter="details">查看详情</a>
+						<button class="layui-btn" style="width: 15%; margin-top: 12px;" id="saveInfo" lay-submit="" lay-filter="addEqBtn">保存</button>
 					</div>
 				</form>
 			</div>
@@ -166,7 +156,7 @@
 			})
 			
 			laydate.render({
-				elem: '#ruzhiTime',
+				elem: '#statisticsTime',
 				type:'date'
 				/* range: true  区间时间选择*/
 			});
@@ -206,35 +196,28 @@
 				return true;
 			}
 			
-			
-			$("#triggerUpload").click(function(){
-				$("#photoUpload").click();
+			//计算盈利
+			$("#calculation").click(function(){
+				var jsType = $("input[name='calculationType']:checked").val();
+				if(jsType==null || jsType=='' || jsType=='undefined'){
+					layer.msg("请先选择统计分类",{'icon':2})
+				}else{
+					$.ajax({
+						type:"get",
+						url:"/${applicationScope.adminprefix }/statistics/calculation",
+						data:{"jsType":jsType},
+						dataType:"html",
+						async:false,
+						success:function(data){
+							
+						},
+					});
+				}
+				
 			})
 			
 		})
 		
-		//删除活动计划
-		function delplan(planNum){
-			var text = "确定删除'活动计划"+planNum+"'?";
-			layer.confirm(text, {icon: 7}, function(){
-				
-				$("#plan"+planNum).remove();
-				layer.closeAll('dialog');
-				$("#allNum").val($("#allNum").val().replace(planNum+",",""));
-			})
-		}
-    	
-		function submitfile(){
-			$("#fileForm").ajaxSubmit({
-				type:"post",
-		    	dataType:"json",
-		  		success: function (data) {
-		  			var imghtml = '<img alt="" src="'+data.photoUrl+'" width="200px;" heigth="250px;" >';
-		  			$("#triggerUpload").html(imghtml);
-		  			$("#photoUrl").val(data.photoUrl);
-		   	    }
-		   	}) 
-		}
 		
 	</script>
 	</m:Content>

@@ -230,7 +230,9 @@ public class DanceClassController {
 	@Authorize(setting="课程-课程计划")
 	public ModelAndView classPrice(){
 		Map<String,Object> map = new HashMap<String,Object>();
-		map = danceClassService.selPriceInfo(); 
+		map = danceClassService.selPriceInfo();
+		List<Map> shopList = danceClassService.selShopList();
+		map.put("shopList", shopList);
 		return new ModelAndView("admin/class/classprice/list",map);
 	}
 	

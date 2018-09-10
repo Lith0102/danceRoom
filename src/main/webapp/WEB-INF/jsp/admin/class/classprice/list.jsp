@@ -30,6 +30,15 @@
 		.nowPage{
 			margin-top: 10px;
 		}
+		.layui-form-select .layui-edge{
+			right: -253%;
+		}
+		.layui-form-select dl{
+			width: 365%;
+		}
+		.layui-select-title{
+			width: 396%;
+		}		
 	</style>
 </m:Content>
 <m:Content contentPlaceHolderId="content">
@@ -40,10 +49,21 @@
 		<div class="layui-field-box" style=" border-color:#666; border-radius:3px; padding:10px;">
 			<form class="layui-form">
 			<input type="hidden" name="priceId" id="priceId" value="${Id}">
-            	<div class="layui-form-item">
+            	<%-- <div class="layui-form-item">
 					<label class="layui-form-label"><span class="must">*</span>舞蹈班地址：</label>
 					<div class="layui-input-block">
 						<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input" />
+					</div>
+				</div> --%>
+				<div class="layui-form-item">
+					<label class="layui-form-label">舞蹈班地址：</label>
+					<div class="layui-input-inline">
+						<select class="layui-inputs" name="shopId" id="shopId" lay-filter="shopId">
+							<option value="">请选择</option>	
+							<c:forEach items="${shopList}" var="shopList">
+								<option value="${shopList.Id}"  <c:if test="${shopList.Id==shopId}">selected</c:if> >${shopList.address}</option>
+							</c:forEach>
+						</select>
 					</div>
 				</div>
 				<!-- 季度详情 -->
@@ -184,9 +204,9 @@
 			}); */
 			//监听提交
 			form.on('submit(addEqBtn)', function(data){
-				/* if(!check()){
+				if(!check()){
 					return false;
-				} */
+				}
 				var success = function(data){
 					if(data.result){
 						layer.msg(data.msg, {icon: 1});
@@ -198,14 +218,18 @@
 				ajax('/${applicationScope.adminprefix }/danceClass/addClassPrice', postData, success, 'post', 'json');
 				return false;
 			})
+			function check(){
+				debugger;
+				var shopId = $("#shopId").val();
+				if(shopId==null || shopId=='' ){
+					layer.msg("请选择分店地址！",{icon:2});
+					return false;
+				}
+				return true;
+			}
 			//自定义验证规则
 			form.verify({
 				
-				address: function(value) {
-					if(value.length < 3) {
-						return '请填写舞蹈班名称及位置';
-					}
-				},
 				jidu:function(value){
 					var regPos = /^\d+(\.\d+)?$/;//非负浮点数
 					if(value==null || value=='' || !regPos.test(value)){

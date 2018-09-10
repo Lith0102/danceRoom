@@ -104,20 +104,23 @@
 	<select id="selPriceInfo" resultType="hashmap">
 		select * from classprice where Id!=0
 	</select>
+	<select id="selShopList" resultType="hashmap">
+		select * from shops where isDel=0
+	</select>
 	<!-- 保存价格信息 -->
 	<insert id="addClassPriceInfo" parameterType="hashmap">
-		insert into classprice (address,
+		insert into classprice (shopId,
 		jidu,<if test="jiduActivity!=null and jiduActivity!=''">jiduActivity,</if>jiduHour,jiduGift,
 		bannian,<if test="bannianActivity!=null and bannianActivity!=''">bannianActivity,</if>bannianHour,bannianGift,
 		years,<if test="yearActivity!=null and yearActivity!=''">yearActivity,</if>yearHour,yearGift,isActivity) 
-		values (#{address},
+		values (#{shopId},
 		#{jidu},<if test="jiduActivity!=null and jiduActivity!=''">#{jiduActivity},</if>#{jiduHour},#{jiduGift},
 		#{bannian},<if test="bannianActivity!=null and bannianActivity!=''">#{bannianActivity},</if>#{bannianHour},#{bannianGift},
 		#{years},<if test="yearActivity!=null and yearActivity!=''">#{yearActivity},</if>#{yearHour},#{yearGift},#{isActivity})
 	</insert>
 	<!-- 修改价格信息 -->
 	<update id="updClassPriceInfo" parameterType="hashmap">
-		update classprice set address=#{address},jidu=#{jidu},<if test="jiduActivity!=null and jiduActivity!=''">jiduActivity=#{jiduActivity},</if>jiduHour=#{jiduHour},jiduGift=#{jiduGift},
+		update classprice set shopId=#{shopId},jidu=#{jidu},<if test="jiduActivity!=null and jiduActivity!=''">jiduActivity=#{jiduActivity},</if>jiduHour=#{jiduHour},jiduGift=#{jiduGift},
 		bannian=#{bannian},<if test="bannianActivity!=null and bannianActivity!=''">bannianActivity=#{bannianActivity},</if>bannianHour=#{bannianHour},bannianGift=#{bannianGift},
 		years=#{years},<if test="yearActivity!=null and yearActivity!=''">yearActivity=#{yearActivity},</if>yearHour=#{yearHour},yearGift=#{yearGift},isActivity=#{isActivity}
 		where Id=#{priceId}

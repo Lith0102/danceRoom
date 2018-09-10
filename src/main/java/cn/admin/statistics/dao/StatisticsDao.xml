@@ -4,6 +4,31 @@
 
 <mapper namespace="statisticsDao">
 	
-
-
+	<!-- 查询缴费学生总额 -->
+	<select id="calculationStudentPay" parameterType="hashmap" resultType="hashmap">
+		select * from student where isPay=0 and isDel=0
+		<if test="jsType!=null and jsType!='' and jsType=='1'.toString() ">
+			and QUARTER(entranceTime)=QUARTER(now())
+		</if>
+		<if test="jsType!=null and jsType!='' and jsType=='2'.toString() ">
+			and date_format(entranceTime , '%m') <![CDATA[>=]]>1 and date_format(entranceTime , '%m') <![CDATA[<=]]>6
+		</if>
+		<if test="jsType!=null and jsType!='' and jsType=='3'.toString() ">
+			and date_format(entranceTime , '%m') <![CDATA[>=]]>7 and date_format(entranceTime , '%m') <![CDATA[<=]]>12
+		</if>
+		<if test="jsType!=null and jsType!='' and jsType=='4'.toString() ">
+			and YEAR(entranceTime)=YEAR(NOW())
+		</if>
+	</select>
+	<!-- 查询课程的价格 -->
+	<select id="selClassPrice" parameterType="hashmap" resultType="double">
+		select 
+		<if test="isPayType=='1'.toString() ">jidu</if>
+		<if test="isPayType=='2'.toString() ">bannian</if>
+		<if test="isPayType=='3'.toString() ">years</if>
+		from classprice 
+		where shopId=#{inShop}
+		
+	</select>
+	
 </mapper>

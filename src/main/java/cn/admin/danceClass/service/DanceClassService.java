@@ -89,6 +89,10 @@ public class DanceClassService {
 	public Map<String, Object> selPriceInfo() {
 		return sqlSession.selectOne("danceClassDao.selPriceInfo");
 	}
+	//查询所有门店
+	public List<Map> selShopList() {
+		return sqlSession.selectList("danceClassDao.selShopList");
+	}
 	//保存价格信息
 	public int addClassPriceInfo(Map map) {
 		return sqlSession.insert("danceClassDao.addClassPriceInfo",map);
