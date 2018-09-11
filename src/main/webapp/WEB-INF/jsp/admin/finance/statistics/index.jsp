@@ -67,7 +67,7 @@
 			<blockquote class="layui-elem-quote layui-bg-blue">
 				财务统计计算
 			</blockquote>
-		
+			<input type="text" name="isCalculation" id="isCalculation" value="0">
 			<div class="layui-field-box" style="border-color: #666; border-radius: 3px; padding: 10px;">
 				<form class="layui-form">
 					
@@ -77,43 +77,43 @@
 					      <input type="radio"  name="calculationType" value="1" title="季度统计">
 					      <input type="radio"  name="calculationType" value="2" title="上半年统计" >
 					      <input type="radio"  name="calculationType" value="3" title="下半年统计" >
-					      <input type="radio"  name="calculationType" value="4" title="年统计" >
+					      <input type="radio"  name="calculationType" value="4" title="本年统计" >
 					    </div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label"><span class="must">*</span>学生缴费收入：</label>
 						<div class="layui-input-block">
-							<input type="text" name="studentPay" id="studentPay" value="${studentPay}" lay-verify="studentPay"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="studentPay" id="studentPay" value="" lay-verify="studentPay"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label"><span class="must">*</span>活动收入：</label>
 						<div class="layui-input-block">
-							<input type="text" name="activityIncome" id="activityIncome" value="${activityIncome}" lay-verify="activityIncome"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="activityIncome" id="activityIncome" value="" lay-verify="activityIncome"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label"><span class="must">*</span>购买支出：</label>
 						<div class="layui-input-block">
-							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="expenditure" id="expenditure" value="" lay-verify="expenditure"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">统计时间：</label>
 						<div class="layui-input-inline">
-							<input type="text" readonly="readonly" value="${statisticsTime}" name="statisticsTime" id="statisticsTime" autocomplete="off" class="layui-input" style="width: 502%">
+							<input type="text" readonly="readonly" value="" name="statisticsTime" id="statisticsTime" autocomplete="off" class="layui-input" style="width: 502%">
 						</div>
 					</div>
 					<div class="layui-form-item" style="margin-top: 10px;">
 						<label class="layui-form-label">其他支出：</label>
 						<div class="layui-input-block">
-							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="otherBuy" id="otherBuy" value="" lay-verify="otherBuy"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item" style="margin-top: 10px;">
 						<label class="layui-form-label"><span class="must">总共盈利：</span></label>
 						<div class="layui-input-block">
-							<input type="text" name="address" id="address" value="${address}" lay-verify="address"  autocomplete="off" class="layui-input only-input" />
+							<input type="text" name="profit" id="profit" value="" lay-verify="profit"  autocomplete="off" class="layui-input only-input" />
 						</div>
 					</div>
 					<div class="layui-form-item" style="text-align: center;">
@@ -151,7 +151,7 @@
 					}
 				}
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/teachers/addTeachersInfo', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/finance/addTeachersInfo', postData, success, 'post', 'json');
 				return false;
 			})
 			
@@ -204,11 +204,30 @@
 				}else{
 					$.ajax({
 						type:"get",
-						url:"/${applicationScope.adminprefix }/statistics/calculation",
+						url:"/${applicationScope.adminprefix }/finance/calculation",
 						data:{"jsType":jsType},
-						dataType:"html",
+						dataType:"json",
 						async:false,
 						success:function(data){
+							
+							var isCalculation = $("#isCalculation").val();
+							if(isCalculation==0){
+								$("#studentPay").val(data.totalStuMoney);
+								$("#activityIncome").val(data.totalActivityMoney);
+								$("#expenditure").val(data.buyMoney);
+								$("#statisticsTime").val(data.nowYmd);
+								$("#profit").val(data.profit);
+								$("#isCalculation").val(1);
+							}else{
+								var studentPay = Number($("#studentPay").val());//学生收费
+								var activityIncome = Number($("#activityIncome").val());//活动盈利
+								var expenditure = Number($("#expenditure").val());//购买支出
+								var otherBuy = Number($("#otherBuy").val());//其他支出
+								var profit = studentPay+activityIncome-expenditure-otherBuy;
+								$("#profit").val(profit);//总盈利
+							}
+							
+							
 							
 						},
 					});

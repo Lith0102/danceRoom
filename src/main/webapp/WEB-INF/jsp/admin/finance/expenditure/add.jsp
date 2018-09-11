@@ -118,7 +118,7 @@
 					}
 				}
 				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/expenditure/addORupdZCInfo', postData, success, 'post', 'json');
+				ajax('/${applicationScope.adminprefix }/finance/addORupdZCInfo', postData, success, 'post', 'json');
 				return false;
 			})
 			

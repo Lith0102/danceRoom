@@ -123,7 +123,7 @@
 			var tableIns = table.render({
 				id: 'dataList',
 				elem: '#dataList',
-				url: '/${applicationScope.adminprefix }/expenditure/expenditureLiatData', //数据接口
+				url: '/${applicationScope.adminprefix }/finance/expenditureLiatData', //数据接口
 				cellMinWidth: 100,
 				page: true, //开启分页
 				limits: [10, 20, 30, 40, 50],
@@ -218,7 +218,7 @@
 				if(type==1){
 					title = "添加支出记录";
 				}
-				openwindow("/expenditure/addORupdZC?infoId="+Id,title,600,600,false,function(){
+				openwindow("/finance/addORupdZC?infoId="+Id,title,600,600,false,function(){
 					tableIns.reload({
 						page: {
 							curr: 1
@@ -232,7 +232,7 @@
 				layer.confirm('确定删除该记录吗？', {icon: 7}, function(){
 					$.ajax({
 						type : "POST",
-						url : "/${applicationScope.adminprefix }/expenditure/delZhiChuInfo",
+						url : "/${applicationScope.adminprefix }/finance/delZhiChuInfo",
 						data : {"infoId" : infoId},
 						success : function(data) {
 							tableIns.reload({

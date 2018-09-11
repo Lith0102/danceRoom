@@ -117,7 +117,14 @@
 									  		<option value="${stuList.Id}" <c:if test="${fn:contains(list.students,stuList.Id)==true}">selected</c:if> >${stuList.stuName}</option>
 									  	</c:forEach>
 									</select>
-								</div> 
+									
+									<div class="layui-inline" style="margin-top: -5px;margin-left: 349.5px;">
+										<label class="layui-form-label">盈利：</label>
+									</div>
+									<div class="layui-inline" style="margin-top: -12px;">
+										<input type="text" placeholder="盈利金额￥" lay-verify="plan${list.planNum}_profit" value="${list.profit}" name="plan${list.planNum}_profit" id="plan${list.planNum}_profit"  autocomplete="off" class="layui-input" style="width: 122%;">
+									</div>
+								</div>
 							</div>  
 						</c:forEach>
 					</c:if>
@@ -172,11 +179,13 @@
 					return result;
 				}else{
 					$("#allPlans .planDiv").each(function(){
+						debugger;
 						var num = $(this).attr("num");
 						var title = $(this).find("input[id='plan"+num+"_planName']").val();
 						var planTime = $(this).find("input[id='plan"+num+"_activityTime']").val();
 						var address = $(this).find("input[id='plan"+num+"_address']").val();
 						var students = $(this).find("input[id='plan"+num+"_students']").val();
+						var profit = $(this).find("input[id='plan"+num+"_profit']").val();
 						if(title==null || title==''){
 							tipinfo("请输入活动标题！","#plan"+num+"_planName");
 							result = false;
@@ -194,6 +203,12 @@
 						}
 						if(students==null || students==''){
 							tipinfo("请选择参加的学生！","#id_select"+num);
+							result = false;
+							return result;
+						}
+						var patrn  = /^(-)?\d+(\.\d+)?$/;//校验数字
+						if(profit==null || profit=='' || !patrn.exec(profit)){
+							tipinfo("请输入此次活动的盈利！","#plan"+num+"_profit");
 							result = false;
 							return result;
 						}
@@ -249,6 +264,13 @@
 						   '		<label id="id_select'+newNum+'" class="layui-form-label"><span class="must">*</span>参加学生：</label> '+
 						   '		<select id="id_select" num='+newNum+' class="selectpicker bla bla bli" multiple data-live-search="true"> '+options+
 						   '		</select> '+
+						   		
+						   '		<div class="layui-inline" style="margin-top: -5px;margin-left: 347px;">'+
+						   '			<label class="layui-form-label">盈利：</label>'+
+						   '		</div>'+
+						   '		<div class="layui-inline" style="margin-top: -11px;">'+
+						   '			<input type="text" placeholder="盈利金额￥" lay-verify="plan'+newNum+'_profit" value="" name="plan'+newNum+'_profit" id="plan'+newNum+'_profit"  autocomplete="off" class="layui-input" style="width: 122%;">'+
+						   '		</div>'+
 						   '	</div> '+
 						   '</div>';
 				
