@@ -57,6 +57,22 @@ public class FinanceService {
 	public double selBuyMoney(Map search) {
 		return sqlSession.selectOne("financeDao.selBuyMoney", search); 
 	}
+	//添加计算结果
+	public int addStatisticsInfo(Map map) {
+		return sqlSession.insert("financeDao.addStatisticsInfo", map);
+	}
+	//查询统计总条数
+	public long selTJInfoTotalCount(Map search) {
+		return sqlSession.selectOne("financeDao.selTJInfoTotalCount", search);
+	}
+	//查询统计列表
+	public List<Map> selStatisticsList(Map search) {
+		return sqlSession.selectList("financeDao.selStatisticsList", search);
+	}
+	//删除统计信息
+	public int delStatistics(int infoId) {
+		return sqlSession.update("financeDao.delStatistics",infoId);
+	}
 	
 	
 }

@@ -19,26 +19,26 @@
 	<!-- 内容主体区域 -->
 	<div style="padding: 15px;" class="layui-anim layui-anim-upbit">
 		<blockquote class="layui-elem-quote layui-bg-blue">
-			教师列表
+			统计列表
 		</blockquote>
 		<div class="yw_cx">
 			<div class="layui-form-item">
 				<div class="layui-inline">
-					<label class="layui-form-label">教师姓名：</label>
+					<label class="layui-form-label">统计类型：</label>
 					<div class="layui-input-inline">
-						<input type="text" name="teaName" id="teaName" placeholder="请填写教师姓名" autocomplete="off" class="layui-input">
+						<select class="layui-input" name="statisticsType" id="statisticsType">
+							<option value="">请选择</option>
+							<option value="1">季度</option>
+							<option value="2">上半年</option>
+							<option value="3">下半年</option>
+							<option value="4">全年</option>
+						</select>
 					</div>
 				</div>
 				<div class="layui-inline">
-					<label class="layui-form-label">手机号：</label>
+					<label class="layui-form-label">统计时间：</label>
 					<div class="layui-input-inline">
-						<input type="text" name="teaPhone" id="teaPhone" placeholder="请填教师手机号" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">入职时间：</label>
-					<div class="layui-input-inline">
-						<input type="text" name="ruzhiTime" id="ruzhiTime" lay-verify="date" autocomplete="off" class="layui-input">
+						<input type="text" name="tjTime" id="tjTime" lay-verify="date" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-inline" id="layerDemo" style="margin-left: 15px;">
@@ -51,11 +51,6 @@
 						<button class="layui-btn layui-btn-normal" style="background-color: #FF6633" id="reset"><i class="layui-icon">&#xe620;</i>重置</button>
 					</div>
 				</div>
-				<div class="layui-inline" id="layerDemo" style="margin-left: -7%;">
-					<div class="layui-input-inline">
-						<button class="layui-btn layui-btn-normal" id="addTeacher"><i class="layui-icon">&#xe654;</i>添加教师</button>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="layui-form">
@@ -66,7 +61,6 @@
 	</div>
 	
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-xs" lay-event="update">编辑</a>
 		<a class="layui-btn layui-btn-xs" style="background-color: red;" lay-event="delete">删除</a>
 	</script>
 	
@@ -95,50 +89,47 @@
 			var tableIns = table.render({
 				id: 'dataList',
 				elem: '#dataList',
-				url: '/${applicationScope.adminprefix }/teachers/teachersListData', //数据接口
+				url: '/${applicationScope.adminprefix }/finance/statisticsListData', //数据接口
 				cellMinWidth: 100,
 				page: true, //开启分页
 				limits: [10, 20, 30, 40, 50],
-				where:{
-		            'type':${type},
-		        },
 				cols: [
 					[	
 						//表头
 						{
 							width:'13%',
-							field: 'teacherName',
-							title: '教师姓名',
+							field: 'typeText',
+							title: '统计类型',
 						},
 						{
 							width:'10%',
-							field: 'sexText',
-							title: '性别',
+							field: 'studentPay',
+							title: '学生缴费收入',
 						},
 						{
 							width:'10%',
-							field:"age",	
-							title: '年龄',
+							field:"activityIncome",	
+							title: '活动收入',
 						},
 						{
 							width:'17%',	
-							field: 'address',
-							title: '家庭住址',
+							field: 'otherIncome',
+							title: '其他收入',
 						}, 
 						{
 							width:'13%',	
-							field: 'phoneNum',
-							title: '手机号',
+							field: 'expenditure',
+							title: '购买支出',
 						},
 						{
 							width:'13%',
-							field: 'education',
-							title: '学历',
+							field: 'otherBuy',
+							title: '其他支出',
 						},
 						{
 							width:'13%',	
-							field: 'entryTime',
-							title: '入职时间',
+							field: 'profit',
+							title: '总收益',
 						},
 						{
 							fixed: 'right',
@@ -170,20 +161,16 @@
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				var tr = obj.tr; //获得当前行 tr 的DOM对象
 				
-				if(layEvent === 'update'){ //编辑
-					updTeacher(2,data.Id);
-			  	}else if(layEvent === 'delete'){ //删除
-			  		delTeacher(data.Id);
+				if(layEvent === 'delete'){ //删除
+					delStatistics(data.Id);
 			  	}
 			})
 			
 			$('#search').click(function() { //搜索，重置表格
 				tableIns.reload({
 					where: { //设定异步数据接口的额外参数，任意设
-						teaName:$('#teaName').val(),
-						teaPhone:$('#teaPhone').val(),
-						ruzhiTime:$("#ruzhiTime").val(),
-						type:${type},
+						statisticsType:$('#statisticsType').val(),
+						tjTime:$('#tjTime').val(),
 					},
 					page: {
 						curr: 1 //重新从第 1 页开始
@@ -191,52 +178,30 @@
 				});
 			})
 			$('#reset').click(function(){//重置
-				$('#teaName').val("");
-				$('#teaPhone').val("");
-				$("#ruzhiTime").val("");
+				$('#statisticsType').val("");
+				$('#tjTime').val("");
 				tableIns.reload({
 					where: { //设定异步数据接口的额外参数，任意设
-						teaName:"",
-						teaPhone:"",
-						ruzhiTime:"",
-						type:${type},
+						statisticsType:"",
+						tjTime:"",
 					},
 					page: {
 						curr: 1 //重新从第 1 页开始
 					}
 				});
 			})
-			//添加教师
-			$("#addTeacher").click(function(){
-				updTeacher(1," ");
-			})
 			
-			//编辑教师信息
-			function updTeacher(type,Id){
-				var title = "编辑教师信息";
-				if(type==1){
-					title = "添加教师信息";
-				}
-				openwindow("/teachers/addTeacherFace?type="+type+"&teacherId="+Id,title,900,1500,false,function(){
-					tableIns.reload({
-						page: {
-							curr: 1
-						}
-					});
-				});
-			}
 			
 			//删除操作
-			function delStudent(stuId){
+			function delStatistics(staId){
 				layer.confirm('确定删除该教师吗？', {icon: 7}, function(){
 					$.ajax({
 						type : "POST",
-						url : "/${applicationScope.adminprefix }/teachers/delTeacherInfo",
-						data : {"stuId" : stuId},
+						url : "/${applicationScope.adminprefix }/finance/delStatistics",
+						data : {"infoId" : staId},
 						success : function(data) {
 							tableIns.reload({
 								where: { //设定异步数据接口的额外参数，任意设
-									type:${type},
 									num:Math.random()
 								},
 								page: {

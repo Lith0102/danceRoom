@@ -86,7 +86,7 @@
 	</select>
 	<!-- 查询购买支出金额 -->
 	<select id="selBuyMoney" parameterType="hashmap" resultType="double">
-		select sum(expenseMoney) from expenditure where isDel=0
+		select IFNULL(sum(expenseMoney),0) from expenditure where isDel=0
 		<if test="jsType!=null and jsType!='' and jsType=='1'.toString() ">
 			and QUARTER(expenseTime)=QUARTER(now())
 		</if>
@@ -100,5 +100,55 @@
 			and YEAR(expenseTime)=YEAR(NOW())
 		</if>
 	</select>
+	<!-- 添加计算结果 -->
+	<insert id="addStatisticsInfo" parameterType="hashmap">
+		insert into statisticsResult (calculationType,studentPay,activityIncome,expenditure,
+		<if test="otherIncome!=null and otherIncome!='' ">
+			otherIncome,
+		</if>
+		<if test="otherBuy!=null and otherBuy!='' ">
+			otherBuy,
+		</if>
+		profit,statisticsTime)
+		values (#{calculationType},#{studentPay},#{activityIncome},#{expenditure},
+		<if test="otherIncome!=null and otherIncome!='' ">
+			#{otherIncome},
+		</if>
+		<if test="otherBuy!=null and otherBuy!='' ">
+			#{otherBuy},
+		</if>
+		#{profit},now())
+	</insert>
+	 <!-- 查询统计结果总条数 -->
+	 <select id="selTJInfoTotalCount" parameterType="hashmap" resultType="long">
+	 	select count(0) from statisticsResult where isDel=0
+	 	<if test="statisticsType!=null and statisticsType!='' ">
+	 		and calculationType = #{statisticsType}
+	 	</if>
+	 	<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and date_format(statisticsTime , '%Y-%m-%d') <![CDATA[>=]]>#{startTime}
+    		and date_format(statisticsTime , '%Y-%m-%d') <![CDATA[<=]]>#{endTime}
+		</if>
+	 </select>
+	 <!-- 查询统计列表 -->
+	 <select id="selStatisticsList" parameterType="hashmap" resultType="hashmap">
+	 	select *,date_format(statisticsTime , '%Y-%m-%d %T') sTime,
+	 	case calculationType when 1 then '季度统计' when 2 then '上半年统计' 
+	 	when 3 then '下半年统计' when 4 then '全年统计' end typeText 
+	 	from statisticsResult where isDel=0
+	 	<if test="statisticsType!=null and statisticsType!='' ">
+	 		and calculationType = #{statisticsType}
+	 	</if>
+	 	<if test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and date_format(statisticsTime , '%Y-%m-%d') <![CDATA[>=]]>#{startTime}
+    		and date_format(statisticsTime , '%Y-%m-%d') <![CDATA[<=]]>#{endTime}
+		</if>
+		order by statisticsTime desc
+		limit #{start},#{pageSize}
+	 </select>
+	 <!-- 删除统计信息 -->
+	 <update id="delStatistics" parameterType="int">
+	 	update statisticsResult set isDel=1 where Id=#{infoId}
+	 </update>
 	 
 </mapper>

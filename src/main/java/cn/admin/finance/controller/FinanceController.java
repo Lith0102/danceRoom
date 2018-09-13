@@ -91,9 +91,6 @@ public class FinanceController {
 			map.put("infoId", "");
 		}
 		
-				
-		
-				
 		return new ModelAndView("admin/finance/expenditure/add",map);
 		
 	}
@@ -140,7 +137,7 @@ public class FinanceController {
 	@RequestMapping(value="/index")
 	public ModelAndView statisticsIndex() {
 		Map<String,Object> map = new HashMap<String, Object>();
-		return new ModelAndView("admin/finance/statistics/index",map);
+		return new ModelAndView("admin/finance/statistics/calculation",map);
 	}
 	
 	@RequestMapping(value="/calculation")
@@ -238,5 +235,77 @@ public class FinanceController {
 		return result;
 		
 	}
+	
+	//保存统计结果
+	@RequestMapping(value="/addStatisticsInfo")
+	@ResponseBody
+	public Map<String,Object> addStatisticsInfo(@RequestParam Map map){
+		Map<String,Object> result = new HashMap<String, Object>();
+		int row = financeService.addStatisticsInfo(map);
+		if(row>0) {
+			result.put("result", true);
+			result.put("msg","保存成功！");
+		}else {
+			result.put("result", false);
+			result.put("msg","保存失败！");
+		}
+		return result;
+	}
+	
+	//统计结果页面展示
+	@RequestMapping(value="/statisticsList")
+	public ModelAndView statisticsList(){
+		return new ModelAndView("admin/finance/statistics/list");
+	}
+	
+	//统计结果数据
+	@RequestMapping(value="/statisticsListData")
+	@ResponseBody
+	public Map<String,Object> statisticsListData(HttpServletRequest request,@RequestParam Map search,int page, int limit){
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		long totalCount = financeService.selTJInfoTotalCount(search);//总条数
+		Page page2 = new Page(totalCount, page, limit);
+		search.put("start", page2.getStartPos());
+		search.put("pageSize", limit);
+		
+		String tjTime = search.get("tjTime")+"";
+		String startTime = "";
+		String endTime = "";
+		if(!StringUtils.isEmpty(tjTime) && !tjTime.equals("null")) {
+			String[] time = tjTime.split("~");
+			startTime = time[0];
+			endTime = time[1].trim();
+			
+			search.put("startTime", startTime);
+			search.put("endTime", endTime);
+		}
+		
+		List<Map> list = financeService.selStatisticsList(search);//统计列表
+		map.put("msg", "");
+		map.put("code", 0);
+		map.put("data", list);
+		map.put("count", totalCount);
+		
+		return map;
+	}
+	
+	//删除统计信息
+	@RequestMapping(value="/delStatistics")
+	@ResponseBody
+	public Map<String,Object> delStatistics(@RequestParam("infoId") int infoId){
+		Map<String,Object> result = new HashMap<String, Object>();
+		int row = financeService.delStatistics(infoId);
+		if(row>0){
+			result.put("result", true);
+			result.put("msg", "删除成功！");
+		}else {
+			result.put("result", false);
+			result.put("msg", "删除失败！");
+		}
+		
+		return result;
+	}
+	
 	
 }
