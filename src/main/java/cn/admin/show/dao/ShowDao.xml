@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="showDao">
+	<!-- 新增风采展示信息 -->	
+	<insert id="addShowInfo" parameterType="hashmap">
+		insert into showStyle (fileUrl,fileType,roleType,uploadTime,founder) values 
+		(#{fileUrl},#{fileType},#{roleType},now(),#{founder})
+	</insert>	
+		
+
+</mapper>
