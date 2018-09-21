@@ -10,46 +10,11 @@
 <link rel="stylesheet" href="/manage/public/css/selected/bootstrap-select.css">
 
 	<style>
-		.layui-form-label{
-			width: 145px;
-		}
-		.must{
-			color: red;
-			margin-right: 2%;
-			size: 10px;
-			font-size: 15px;
-		}
 		.nowPage{
 			margin-top: 10px;
 		}
-		.layui-input {
-		    width: 325%;
-		}
-		.layui-form-select .layui-edge{
-			right: -215%;
-		}
-		.layui-form-select dl{
-			width: 325%;
-		}
-		.bootstrap-select > .btn {
-		    width: 281%;
-		}
-		.dropdown-menu{
-			width: 280%;
-		}
-		.dropdown-menu>li>a{
-			width: 595%;
-		}
-		li{
-			width: 10%;
-		}
-		.delonePlan{
-			margin-right: 10px;
-		}
-		.deloneicon{
-			font-size: 18px;
-			color: #EB3B42;
-			cursor: pointer;
+		.fileCalss{
+			
 		}
 	</style>
 </m:Content>
@@ -80,6 +45,26 @@
 				<input type="file" id="videoFile" name="videoFile" value="" onchange="submitVideo();" >
 			</form>
 		</div>
+		
+		<ul class="layui-timeline">
+			<c:forEach items="${dateList}" var="dateList">
+				 <li class="layui-timeline-item" style="width: 100%">
+				    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+				    <div class="layui-timeline-content layui-text">
+				      <h3 class="layui-timeline-title">${dateList.timeData}</h3>
+				      <p>
+				      	<c:forEach items="${list}" var="list">
+				      		<c:if test="${list.upTime==dateList.timeData}">
+				      				<img alt="" src="${list.jtUrl}" style="margin-right: 10px;">
+				      				<span class="fileCalss">${list.fileName}</span>
+				      		</c:if>
+				      	</c:forEach>
+				      </p>
+				    </div>
+				  </li>
+			</c:forEach>
+		</ul>
+		
 	</div>
 </m:Content>
 <m:Content contentPlaceHolderId="js">

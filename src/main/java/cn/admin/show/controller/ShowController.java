@@ -1,26 +1,24 @@
 package cn.admin.show.controller;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,14 +36,24 @@ public class ShowController {
 	@Autowired
 	ShowService showService;
 	
-	@RequestMapping(value="/videoIndex")
-	@Authorize(setting="风采-教师视频")
-	public ModelAndView videoIndex(@RequestParam("roleType") int roleType) {//1教师 2学生
+	//查看教师视频
+	@RequestMapping(value="/showIndex")
+	@Authorize(setting="风采-教师视频,风采-教师照片,风采-学生视频,风采-学生照片")
+	public ModelAndView videoIndex(@RequestParam("roleType") int roleType,@RequestParam("fileType") int fileType){
 		
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("roleType", roleType);
-		return new ModelAndView("/admin/show/videoIndex",map);
+		map.put("fileType", fileType);
+		
+		List<String> dateList = showService.selTimeList();
+		List<Map> list = showService.selFileByType(map);
+		
+		map.put("dateList", dateList);
+		map.put("list", list);
+		return new ModelAndView("admin/show/videoIndex",map);
+		
 	}
+	
 	
 	@RequestMapping(value = "/uoloadVideo")
 	@ResponseBody
@@ -56,6 +64,7 @@ public class ShowController {
 		Map<String,Object> result = new HashMap<String, Object>();
 		String fileName = file.getOriginalFilename();// 上传文件的名称
 		
+		//文件上传
 		String filePath=Tools.getUploadDir();
 		File pathFile = new File(filePath);//建文件夹
 		if (!pathFile.exists()) {
@@ -63,6 +72,7 @@ public class ShowController {
 		}
 		String newFileName = UUID.randomUUID().toString()+Tools.getFileExtension(file.getOriginalFilename());//获取excel名称
 		String newFilePath = filePath + newFileName;// 新路径
+		//System.out.println(newFilePath);
 		File newFile = new File(newFilePath);
 		try {
 			file.transferTo(newFile);
@@ -74,11 +84,27 @@ public class ShowController {
 		//添加数据库
 		String fileUrl = "/upload/"+sdf.format(new Date())+"/"+newFileName;
 		map.put("fileUrl", fileUrl);
+		map.put("fileName", fileName);
 		//判断是否是图片
 		FileNameMap fileNameMap = URLConnection.getFileNameMap();
 	    String type = fileNameMap.getContentTypeFor(newFilePath);
 	    if(type==null || type.equals("null")){
 	    	map.put("fileType", 1);
+	    	
+	    	//视频生成缩略图
+	    	//String videoRealPath = "D:/Object/danceroom/upload/20180921/275335be-2559-4eb6-9fb2-41997ed75cc7.mp4";
+			// 截图的路径（输出路径）
+			String newJTName = newFileName.substring(0,newFileName.indexOf(".")-1)+".jpg";
+			String imageRealPath = filePath + newJTName;
+			try {
+				// 调用批处理文件
+				Runtime.getRuntime().exec("cmd /c start E://ffmpeg.bat " + newFilePath + " " + imageRealPath);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+			map.put("jtUrl", "/upload/"+sdf.format(new Date())+"/"+newJTName);
 	    }else {
 	    	map.put("fileType", 2);
 	    }
@@ -97,5 +123,6 @@ public class ShowController {
 		
 		return result;
 	}
-
+	
+	
 }

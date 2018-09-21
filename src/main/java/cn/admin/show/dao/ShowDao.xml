@@ -4,9 +4,20 @@
 <mapper namespace="showDao">
 	<!-- 新增风采展示信息 -->	
 	<insert id="addShowInfo" parameterType="hashmap">
-		insert into showStyle (fileUrl,fileType,roleType,uploadTime,founder) values 
-		(#{fileUrl},#{fileType},#{roleType},now(),#{founder})
+		insert into showStyle (fileUrl,fileName,jtUrl,fileType,roleType,uploadTime,founder) values 
+		(#{fileUrl},#{fileName},#{jtUrl},#{fileType},#{roleType},now(),#{founder})
 	</insert>	
-		
-
+	
+	<!-- 查询时间list -->
+	<select id="selTimeList" resultType="hashmap">
+		select date_format(uploadTime , '%Y-%m-%d') timeData from showstyle where isDel=0
+		group by date_format(uploadTime , '%Y-%m-%d')
+		order by uploadTime DESC
+	</select>
+	
+	<!-- 查询视频或照片文件 -->	
+	<select id="selFileByType" parameterType="hashmap" resultType="hashmap">
+		select *,date_format(uploadTime , '%Y-%m-%d') upTime from showstyle where fileType=#{fileType} and roleType=#{roleType} and isDel=0
+	</select>
+	
 </mapper>
