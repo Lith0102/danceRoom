@@ -45,7 +45,7 @@ public class ShowController {
 		map.put("roleType", roleType);
 		map.put("fileType", fileType);
 		
-		List<String> dateList = showService.selTimeList();
+		List<String> dateList = showService.selTimeList(map);
 		List<Map> list = showService.selFileByType(map);
 		
 		map.put("dateList", dateList);
@@ -54,10 +54,10 @@ public class ShowController {
 		
 	}
 	
-	
+	//上传文件
 	@RequestMapping(value = "/uoloadVideo")
 	@ResponseBody
-	public Map<String, Object> uoloadVideo(@RequestParam("videoFile") MultipartFile file, HttpServletRequest request,@RequestParam("roleType") int roleType) {
+	public Map<String, Object> uoloadVideo(@RequestParam("videoFile") MultipartFile file, HttpServletRequest request,@RequestParam("roleType") int roleType) throws IOException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		
@@ -94,16 +94,10 @@ public class ShowController {
 	    	//视频生成缩略图
 	    	//String videoRealPath = "D:/Object/danceroom/upload/20180921/275335be-2559-4eb6-9fb2-41997ed75cc7.mp4";
 			// 截图的路径（输出路径）
-			String newJTName = newFileName.substring(0,newFileName.indexOf(".")-1)+".jpg";
+			String newJTName = newFileName.substring(0,newFileName.indexOf("."))+".jpg";
 			String imageRealPath = filePath + newJTName;
-			try {
-				// 调用批处理文件
-				Runtime.getRuntime().exec("cmd /c start E://ffmpeg.bat " + newFilePath + " " + imageRealPath);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	
+			createJT(newFilePath,newJTName,imageRealPath);
+			
 			map.put("jtUrl", "/upload/"+sdf.format(new Date())+"/"+newJTName);
 	    }else {
 	    	map.put("fileType", 2);
@@ -124,5 +118,35 @@ public class ShowController {
 		return result;
 	}
 	
+	
+	private void createJT(String newFilePath,String newJTName, String imageRealPath) throws IOException {
+		Runtime rt = Runtime.getRuntime();
+		Process ps = null;
+
+		try {
+			// 调用批处理文件
+			
+			ps = rt.exec("cmd /c start E://ffmpeg.bat " + newFilePath + " " + imageRealPath);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		int i = ps.exitValue();
+//		if (i == 0) {
+//			rt.exec("cmd.exe /C start wmic process where name='cmd.exe' call terminate");
+//			System.out.println("执行完成.");
+//		} else {
+//			System.out.println("执行失败.");
+//		}
+//		ps.destroy();
+//		ps = null;
+ 
+		// 批处理执行完后，根据cmd.exe进程名称
+		// kill掉cmd窗口
+		
+	}
+
 	
 }

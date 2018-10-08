@@ -9,8 +9,8 @@
 	</insert>	
 	
 	<!-- 查询时间list -->
-	<select id="selTimeList" resultType="hashmap">
-		select date_format(uploadTime , '%Y-%m-%d') timeData from showstyle where isDel=0
+	<select id="selTimeList" parameterType="hashmap" resultType="hashmap">
+		select date_format(uploadTime , '%Y-%m-%d') timeData from showstyle where fileType=#{fileType} and roleType=#{roleType} and isDel=0
 		group by date_format(uploadTime , '%Y-%m-%d')
 		order by uploadTime DESC
 	</select>

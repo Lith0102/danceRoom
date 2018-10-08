@@ -22,8 +22,8 @@ public class ShowService {
 	}
 	
 	//查询时间分组list
-	public List<String> selTimeList() {
-		return sqlSession.selectList("showDao.selTimeList");
+	public List<String> selTimeList(Map<String, Object> map) {
+		return sqlSession.selectList("showDao.selTimeList",map);
 	}
 	
 	//查询文件信息

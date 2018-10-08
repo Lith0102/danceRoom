@@ -13,8 +13,8 @@
 		.nowPage{
 			margin-top: 10px;
 		}
-		.fileCalss{
-			
+		.picClass{
+			margin-right: 10px;
 		}
 	</style>
 </m:Content>
@@ -30,7 +30,10 @@
 	</blockquote>
 		<div class="layui-form-item" style="padding-top: 10px; margin-bottom: 0;">
 			<div class="layui-inline">
-				<button class="layui-btn layui-btn-normal" id="addVideo"><i class="layui-icon">&#xe654;</i>上传视频</button>
+				<button class="layui-btn layui-btn-normal" id="addVideo"><i class="layui-icon">&#xe654;</i>
+					<c:if test="${fileType==1}">上传视频</c:if>
+					<c:if test="${fileType==2}">上传照片</c:if>
+				</button>
 			</div>
 			<div class="layui-inline">
 				<button class="layui-btn layui-btn-danger" id="delPlan"><i class="layui-icon">&#xe640;</i><span id="delText">删除视频</span></button>
@@ -46,20 +49,25 @@
 			</form>
 		</div>
 		
-		<ul class="layui-timeline">
+		<ul class="layui-timeline" >
 			<c:forEach items="${dateList}" var="dateList">
-				 <li class="layui-timeline-item" style="width: 100%">
+				 <li class="layui-timeline-item">
 				    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
 				    <div class="layui-timeline-content layui-text">
 				      <h3 class="layui-timeline-title">${dateList.timeData}</h3>
-				      <p>
 				      	<c:forEach items="${list}" var="list">
 				      		<c:if test="${list.upTime==dateList.timeData}">
-				      				<img alt="" src="${list.jtUrl}" style="margin-right: 10px;">
-				      				<span class="fileCalss">${list.fileName}</span>
+				      			<div style="width: 20%;">
+				      				<c:if test="${list.fileType==1}">
+				      					<img class="picClass" alt="" src="${list.jtUrl}">
+				      				</c:if>
+				      				<c:if test="${list.fileType==2}">
+				      					<img class="picClass" alt="" src="${list.fileUrl}" width="15%" >
+				      				</c:if>
+				      				<div>${list.fileName}</div>
+				      			</div>
 				      		</c:if>
 				      	</c:forEach>
-				      </p>
 				    </div>
 				  </li>
 			</c:forEach>
@@ -74,29 +82,9 @@
 
 	<script type="text/javascript">
 	
-	
 		layui.use(['form','laydate','layedit'], function(){
 			var form = layui.form;
 			var laydate = layui.laydate;
-			//监听提交
-			form.on('submit(addEqBtn)', function(data){
-				if(!check()){
-					return false;
-				}
-				var success = function(data){
-					if(data.result){
-						layer.msg(data.msg, {icon: 1});
-					}else{
-						layer.msg(data.msg, {icon: 2});
-					}
-				}
-				var postData = $(data.form).serialize();
-				ajax('/${applicationScope.adminprefix }/danceClass/addClassPlan', postData, success, 'post', 'json');
-				return false;
-			})
-			
-			
-			
 			
 			//点击删除按钮，显示活动计划前的叉号
 			$("#delPlan").click(function(){
@@ -132,8 +120,6 @@
 		   	}) 
 		}
 		
-    	
-	
 	</script>
 </m:Content>
 </m:ContentPage>
